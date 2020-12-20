@@ -1,0 +1,13 @@
+/*全局样式表*/
+html,body,#app{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.h1{
+		font-weight: bold;
+		color: #1b1b1b;
+		font-size: 15px;
+		font-family: "Microsoft Yahei", sans-serif;
+	}
+
