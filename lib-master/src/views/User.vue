@@ -117,9 +117,26 @@ export default {
     },
     //退出按钮
     logout () {
-      window.sessionStorage.clear();
-      this.$router.push("index")
-    },
+      let status = 200;
+      let Token = window.sessionStorage.getItem('token');
+      this.$http.get('/api/v1/auth/logout/', {
+        hearders: {
+          'Authorization': Token,
+        },
+      }).catch(function (error) {
+        if (error.response) {
+          status = error.response.status;
+          msg = error.response.data.non_field_errors;
+        }
+      });
+      if (status === 400) {
+        alert(msg)
+        //this.$message.info(msg);
+      }
+      else {
+        this.$router.push("index")
+      }
+    }
   }
 };
 </script>

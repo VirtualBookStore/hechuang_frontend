@@ -121,17 +121,16 @@ router.beforeEach((to, from, next) => {
   // to:要访问的路径
   // from从哪个路径来的
   // next代表放行
-  if (
-    to.path === '/login' ||
-    to.path === '/studentRegister' ||
-    to.path === '/welcome' ||
-    to.path === '/returns' ||
-    to.path === '/borrows'
-  ) {
-    return next()
-  } else {
-    return next()
+  if (to.path === '/login' || to.path === '/studentRegister' || to.path === '/welcome' || to.path === '/returns' || to.path === '/borrows') {
+    return next();
   }
-})
+  else {
+    //    获取token
+    let token = window.sessionStorage.getItem("token");
+    if (!token) return next("/login");
+    else return next();
+  }
+});
+
 
 export default router

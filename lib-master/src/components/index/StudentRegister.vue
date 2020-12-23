@@ -51,15 +51,6 @@ export default {
       cb(new Error("密码必须在6-15个字符之间,只能由大小写字母数字下划线组成"));
 
     };
-    let checkConfirmPassword = (rule, value, cb) => {
-      const regPassword = this.registerForm.password;
-      if (regPassword === value) {
-        //合法密码
-        return cb();
-      }
-      cb(new Error("前后两次输入的密码必须一致!"));
-
-    };
 
     return {
       //登录表单数据绑定
@@ -81,11 +72,7 @@ export default {
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { validator: checkPassword, trigger: "blur" }
-        ],
-        confirmPassword: [
-          { required: true, message: "请再次确认密码", trigger: "blur" },
-          { validator: checkConfirmPassword, trigger: "blur" }
-        ],
+        ]
 
       }
     }
@@ -96,41 +83,31 @@ export default {
     register () {
       this.$refs.registerFormRef.validate(async valid => {
         if (!valid) return;
-
-        let msg = "";
-        let status = 200;
-        let dt = JSON.stringify({
-          " data": {
-            'username': this.registerForm.username,
-            'email': this.registerForm.tel,
-            'password1': this.registerForm.password,
-            'password2': this.registerForm.password
-          }
-        });
-        let result = await this.$http.post('/api/v1/auth/register/', { dt }).catch(function (error) {
+        let msg1 = "";
+        let msg2 = "";
+        let msg3 = "";
+        let status = 500;
+        let result = await this.$http.post('/api/v1/auth/register/', {
+          "username": this.registerForm.username,
+          "email": this.registerForm.tel,
+          "password1": this.registerForm.password,
+          "password2": this.registerForm.confirmPassword
+        }).catch(function (error) {
           if (error.response) {
             status = error.response.status;
-            msg = error.response.data.msg;
+            msg1 = error.response.data.username;
+            msg2 = error.response.data.email;
+            msg3 = error.response.data.password1;
           }
         });
-
         if (status === 400) {
-          this.$message.info(msg);
+          // this.$message.info(msg);
+          alert(msg1 + msg2 + msg3);
         } else {
-          let inf = result.data.error;
-          let id = result.data.id;
-          if (inf == "Handset Used" || inf == "Invalid phone number") {
-            this.$message.info(inf);
-          }
-          else {
-            window.sessionStorage.setItem('id', id);
-            let tick = "your id is " + id;
-            this.$message.info(tick);
-            this.$router.push({ path: '/login' }, onComplete => {
-            }, onAbort => {
-            })
-          }
-
+          alert("注册成功");
+          this.$router.push({ path: '/login' }, onComplete => {
+          }, onAbort => {
+          })
         }
       })
     }
