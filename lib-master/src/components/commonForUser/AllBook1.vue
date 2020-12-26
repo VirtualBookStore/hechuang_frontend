@@ -1,26 +1,19 @@
 <template>
   <div class="book_search">
-    <el-row style="margin-top: 20px;">
-      <el-col :span="14"
-              :offset="4">
-        <header class="form_header"></header>
-        <el-form ref="bookFormRef"
-                 :model="bookForm"
-                 :rules="bookFormRules"
-                 label-width="110px"
-                 class="demo-now_Data">
-          <!-- <el-form-item label="读者ID" prop="reader_id">
-            <el-input v-model="bookForm.reader_id" placeholder="读者ID"></el-input>
-          </el-form-item> -->
-          <el-button type="primary"
-                     @click="search"
-                     class="submit_btn">点击获得所有图书信息</el-button>
-        </el-form>
-      </el-col>
-    </el-row>
-    <el-dialog title="所有图书"
-               :visible.sync="searchdialogvisible"
-               width="50%">
+    <header class="form_header"></header>
+    <el-form ref="bookFormRef"
+             :model="bookForm"
+             :rules="bookFormRules"
+             label-width="110px"
+             class="demo-now_Data">
+      <el-button type="primary"
+                 @click="search"
+                 class="submit_btn"
+                 v-if="searchdialogvisible">点击获得所有图书商品信息</el-button>
+    </el-form>
+
+    //todo:此处所需要的值应在props或data中建立，调用接口取出数据
+    <div class="book-info">
       <el-table :data="searchlist"
                 style="width: 100%"
                 border
@@ -29,23 +22,18 @@
                          label="书名"
                          width="120"></el-table-column>
         <el-table-column prop="id"
-                         label="介绍"></el-table-column>
+                         label="ISBN"></el-table-column>
         <el-table-column prop="place_id"
-                         label="价格"></el-table-column>
+                         label="简介"></el-table-column>
         <el-table-column prop="publishing_house"
-                         label="新书数量"></el-table-column>
+                         label="价格"></el-table-column>
         <el-table-column prop="introduction"
-                         label="二手书数量"></el-table-column>
+                         label="新书数量"></el-table-column>
         <el-table-column prop="publication_date"
-                         label="是否推荐"></el-table-column>
+                         label="旧书数量"></el-table-column>
+        <!-- <el-table-column prop="isbn" label="是否推荐"></el-table-column> -->
       </el-table>
-      <!-- 底部按钮区域 -->
-      <span slot="footer"
-            class="dialog-footer">
-        <el-button @click="searchdialogvisible=false">确定</el-button>
-
-      </span>
-    </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -54,7 +42,7 @@ export default {
   data () {
     return {
       searchlist: [],
-      searchdialogvisible: false,
+      searchdialogvisible: true,
       //图书表单数据绑定
       bookForm: {
         reader_id: '',
@@ -63,35 +51,41 @@ export default {
       bookFormRules: {
         //    验证书名是否合法
         reader_id: [
-          { required: true, message: "请输入读者ID", trigger: "blur" },
+          { required: true, message: '请输入读者ID', trigger: 'blur' },
         ],
-      }
+      },
     }
   },
   methods: {
     //异步操作
     search () {
-      this.$refs.bookFormRef.validate(async valid => {
-        if (!valid) return;
-        let msg = "";
-        let status = 200;
-        let key = this.bookForm.reader_id;
-        let Token = window.sessionStorage.getItem('token'); //this.$message.info("The database isn't ready.");
-        let result = await this.$http.get('/api/v1/book/')
+      this.$refs.bookFormRef.validate(async (valid) => {
+        if (!valid) return
+        let msg = ''
+        let status = 200
+        let key = this.bookForm.reader_id
+        let Token = window.sessionStorage.getItem('token') //this.$message.info("The database isn't ready.");
+        let result = await this.$http
+          .get('/apip/api/books', {
+            hearders: {
+              Authorization: Token,
+            },
+          })
           .catch(function (error) {
             if (error.response) {
-              status = error.response.status;
-              msg = error.response.data.msg;
+              status = error.response.status
+              msg = error.response.data.msg
             }
-          });
+          })
         this.searchlist = result.data
         if (status === 400) {
-          this.$message.info("该人不存在 !");
+          this.$message.info('该人不存在 !')
         }
-      });
-      this.searchdialogvisible = true
-    }
-  }
+      })
+
+      this.searchdialogvisible = false
+    },
+  },
 }
 </script>
 
@@ -116,6 +110,9 @@ export default {
   /*background-color: lightgoldenrodyellow;*/
 }
 
+.book-info {
+  margin-top: 20px;
+}
 .out-button {
   display: flex;
   justify-content: center;
