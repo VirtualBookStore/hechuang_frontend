@@ -16,7 +16,7 @@
     <!--        页面主体-->
     <el-container class="main-content">
       <!--            侧边栏-->
-      <el-aside width="200px">
+      <el-aside width="150px">
         <el-menu router text-color="#444" active-text-color="#409eff">
           <el-submenu index="1">
             <template slot="title"><p class="sub-title">信息管理</p></template>
@@ -165,7 +165,6 @@ export default {
   color: #333;
   font-weight: 700;
 }
-
 .el-main {
   /*background-color: lightgoldenrodyellow;*/
   background-color: white;

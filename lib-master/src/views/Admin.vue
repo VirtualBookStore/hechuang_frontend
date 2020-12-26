@@ -4,49 +4,54 @@
     <!--        头部区域-->
     <el-header class="elheader">
       <div>
-        <img src="../assets/img/bookstoreIcon.png" height="59" />
+        <img src="../assets/img/bookstoreIcon.png"
+             height="59" />
       </div>
       <!--            <div class="header-name">-->
       <!--                {{username}}-->
       <!--            </div>-->
       <div class="out-button">
-        <el-button @click="logout" size="medium" round> 退出</el-button>
+        <el-button @click="logout"
+                   size="medium"
+                   round> 退出</el-button>
       </div>
     </el-header>
     <!--        页面主体-->
     <el-container class="main-content">
       <!--            侧边栏-->
-      <el-aside width="200px">
-        <el-menu router text-color="#444" active-text-color="#409eff">
+      <el-aside width="150px">
+        <el-menu router
+                 text-color="#444"
+                 active-text-color="#409eff">
           <el-submenu index="1">
-            <template slot="title"><p class="sub-title">读者管理</p></template>
+            <template slot="title">
+              <p class="sub-title">读者管理</p>
+            </template>
             <el-menu-item index="/readerlist">获取读者列表</el-menu-item>
-            <el-menu-item index="/AdminChangeUserInfo"
-              >修改用户信息</el-menu-item
-            >
-            <el-menu-item index="/AdminChangeUserPassword"
-              >修改用户密码</el-menu-item
-            >
+            <el-menu-item index="/AdminChangeUserInfo">修改用户信息</el-menu-item>
+            <el-menu-item index="/AdminChangeUserPassword">修改用户密码</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template slot="title"><p class="sub-title">图书管理</p></template>
+            <template slot="title">
+              <p class="sub-title">图书管理</p>
+            </template>
             <el-menu-item index="/BookReviewAdmin">审核回收申请</el-menu-item>
             <el-menu-item index="/AllBook">确认回收书籍</el-menu-item>
             <el-menu-item index="/SearchBox">管理库存</el-menu-item>
             <el-menu-item index="/BookRegister">确认补货</el-menu-item>
             <el-menu-item index="/BookReturns">归还书籍</el-menu-item>
-            <el-menu-item index="/search">搜索借阅记录</el-menu-item>
+            <el-menu-item index="arch">搜索借阅记录</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
-            <template slot="title"
-              ><p class="sub-title">自习室管理</p></template
-            >
+            <template slot="title">
+              <p class="sub-title">自习室管理</p>
+            </template>
             <el-menu-item index="/RoomList">获取自习室信息</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
-            <template slot="title"
-              ><p class="sub-title">管理员内务</p></template
-            >
+            <template slot="title">
+              <p class="sub-title">管理员内务</p>
+            </template>
             <el-menu-item index="/adminlist">获取管理员列表</el-menu-item>
             <el-menu-item index="/AdminChangeIf">修改管理员信息</el-menu-item>
             <el-menu-item index="/AdminChangePass">修改管理员密码</el-menu-item>
@@ -65,7 +70,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       username: window.sessionStorage.getItem('token'),
       booklist: {
@@ -73,11 +78,11 @@ export default {
       },
     }
   },
-  mounted: function() {
+  mounted: function () {
     this.bookcategory()
   },
   methods: {
-    bookcategory() {
+    bookcategory () {
       let status = 200
       let Token = window.sessionStorage.getItem('token')
       this.$http
@@ -86,17 +91,17 @@ export default {
             Authorization: Token,
           },
         })
-        .then(function(response) {
+        .then(function (response) {
           var data = JSON.stringify(response.data)
           // alert(data);
           window.sessionStorage.setItem('book', data)
         })
-        .catch(function(response) {
+        .catch(function (response) {
           console.log(response)
         })
     },
     //退出按钮
-    logout() {
+    logout () {
       window.sessionStorage.clear()
       this.$router.push('index')
     },
