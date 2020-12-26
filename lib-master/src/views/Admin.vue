@@ -102,11 +102,31 @@ export default {
     },
     //退出按钮
     logout () {
-      window.sessionStorage.clear()
-      this.$router.push('index')
-    },
-  },
+      let status = 200;
+      let Token = window.sessionStorage.getItem('token');
+      this.$http.post('/api/v1/auth/logout/', {
+        params: {},
+        hearders: {
+          'X-CSRFToken': Token
+        }
+      }).catch(function (error) {
+        if (error.response) {
+          status = error.response.status;
+          msg = error.response.data.detail;
+        }
+      });
+      if (status !== 200) {
+        alert(msg)
+        //this.$message.info(msg);
+      }
+      else {
+        window.sessionStorage.clear()
+        this.$router.push("index")
+      }
+    }
+  }
 }
+
 </script>
 
 <style scoped>
