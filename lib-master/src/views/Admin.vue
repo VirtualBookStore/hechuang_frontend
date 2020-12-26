@@ -1,38 +1,35 @@
 <template>
-
   <!--    页面布局-->
   <el-container class="home-container">
     <!--        头部区域-->
-    <el-header>
+    <el-header class="elheader">
       <div>
-        <img src="../assets/img/tj_logo.png"
-             height=40 />
+        <img src="../assets/img/bookstoreIcon.png" height="59" />
       </div>
       <!--            <div class="header-name">-->
       <!--                {{username}}-->
       <!--            </div>-->
       <div class="out-button">
-        <el-button @click="logout"
-                   size="medium"
-                   round> 退出</el-button>
+        <el-button @click="logout" size="medium" round> 退出</el-button>
       </div>
     </el-header>
     <!--        页面主体-->
-    <el-container>
+    <el-container class="main-content">
       <!--            侧边栏-->
       <el-aside width="200px">
-        <el-menu router
-                 background-color="#545c64"
-                 text-color="#fff"
-                 active-text-color="#ffd04b">
+        <el-menu router text-color="#444" active-text-color="#409eff">
           <el-submenu index="1">
-            <template slot="title">读者管理</template>
+            <template slot="title"><p class="sub-title">读者管理</p></template>
             <el-menu-item index="/readerlist">获取读者列表</el-menu-item>
-            <el-menu-item index="/AdminChangeUserInfo">修改用户信息</el-menu-item>
-            <el-menu-item index="/AdminChangeUserPassword">修改用户密码</el-menu-item>
+            <el-menu-item index="/AdminChangeUserInfo"
+              >修改用户信息</el-menu-item
+            >
+            <el-menu-item index="/AdminChangeUserPassword"
+              >修改用户密码</el-menu-item
+            >
           </el-submenu>
           <el-submenu index="2">
-            <template slot="title">图书管理</template>
+            <template slot="title"><p class="sub-title">图书管理</p></template>
             <el-menu-item index="/BookReviewAdmin">审核回收申请</el-menu-item>
             <el-menu-item index="/AllBook">确认回收书籍</el-menu-item>
             <el-menu-item index="/SearchBox">管理库存</el-menu-item>
@@ -41,11 +38,15 @@
             <el-menu-item index="/search">搜索借阅记录</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
-            <template slot="title">自习室管理</template>
+            <template slot="title"
+              ><p class="sub-title">自习室管理</p></template
+            >
             <el-menu-item index="/RoomList">获取自习室信息</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
-            <template slot="title">管理员内务</template>
+            <template slot="title"
+              ><p class="sub-title">管理员内务</p></template
+            >
             <el-menu-item index="/adminlist">获取管理员列表</el-menu-item>
             <el-menu-item index="/AdminChangeIf">修改管理员信息</el-menu-item>
             <el-menu-item index="/AdminChangePass">修改管理员密码</el-menu-item>
@@ -64,43 +65,43 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       username: window.sessionStorage.getItem('token'),
-      booklist:
-      {
+      booklist: {
         book_id: '',
-      }
+      },
     }
   },
-  mounted: function () {
-    this.bookcategory();
-
+  mounted: function() {
+    this.bookcategory()
   },
   methods: {
-    bookcategory () {
-      let status = 200;
-      let Token = window.sessionStorage.getItem('token');
-      this.$http.get('/apip/api/books/', {
-        hearders: {
-          'Authorization': Token,
-        },
-      })
-        .then(function (response) {
-          var data = JSON.stringify(response.data);
+    bookcategory() {
+      let status = 200
+      let Token = window.sessionStorage.getItem('token')
+      this.$http
+        .get('/apip/api/books/', {
+          hearders: {
+            Authorization: Token,
+          },
+        })
+        .then(function(response) {
+          var data = JSON.stringify(response.data)
           // alert(data);
-          window.sessionStorage.setItem('book', data);
-        }).catch(function (response) {
-          console.log(response);
-        });
+          window.sessionStorage.setItem('book', data)
+        })
+        .catch(function(response) {
+          console.log(response)
+        })
     },
     //退出按钮
-    logout () {
-      window.sessionStorage.clear();
-      this.$router.push("index")
+    logout() {
+      window.sessionStorage.clear()
+      this.$router.push('index')
     },
-  }
-};
+  },
+}
 </script>
 
 <style scoped>
@@ -108,19 +109,30 @@ export default {
   height: 100%;
 }
 .el-container {
-  background-color: rgb(84, 92, 100);
+  /* background-color: rgb(84, 92, 100); */
+}
+
+.main-content {
+  width: 70%;
+  margin: auto;
 }
 .el-menu {
   border-right: 0;
 }
-
+.sub-title {
+  color: #333;
+  font-weight: 700;
+}
 .el-header {
-  background: url(../assets/img/head_bg.jpg) top center;
-  background-color: rgb(255, 255, 255);
+  /* background: url(../assets/img/head_bg.jpg) top center; */
+  /* background-color: red  ; */
   display: flex;
   justify-content: space-between;
   margin-left: 0;
   padding-left: 0;
+  width: 70%;
+  margin: auto;
+  border-bottom: 1px solid #e7e7e7;
 }
 
 .el-aside {
