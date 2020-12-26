@@ -34,7 +34,7 @@
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
-              图书查询
+              商城
             </template>
             <el-menu-item index="/BookReview">书籍推荐阅览</el-menu-item>
             <el-menu-item index="/SearchBox1">搜索书籍</el-menu-item>
@@ -119,13 +119,10 @@ export default {
     logout () {
       let status = 200;
       let Token = window.sessionStorage.getItem('token');
-      this.$http.get('/api/v1/auth/logout/', {
-        hearders: {
-          'Authorization': Token,
-        },
-      }).catch(function (error) {
+      this.$http.post('/api/v1/auth/logout/').catch(function (error) {
         if (error.response) {
           status = error.response.status;
+          alert("123");
           msg = error.response.data.non_field_errors;
         }
       });
