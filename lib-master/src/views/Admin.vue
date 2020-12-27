@@ -36,10 +36,10 @@
               <p class="sub-title">图书管理</p>
             </template>
             <el-menu-item index="/BookReviewAdmin">审核回收申请</el-menu-item>
-            <el-menu-item index="/AllBook">确认回收书籍</el-menu-item>
-            <el-menu-item index="/SearchBox">管理库存</el-menu-item>
+            <el-menu-item index="/SearchBox">确认回收书籍</el-menu-item>
+            <el-menu-item index="/AllBook">管理书籍库存信息</el-menu-item>
             <el-menu-item index="/BookRegister">确认补货</el-menu-item>
-            <el-menu-item index="/BookReturns">归还书籍</el-menu-item>
+            <el-menu-item index="/BookReturns">设置促销</el-menu-item>
             <el-menu-item index="arch">搜索借阅记录</el-menu-item>
           </el-submenu>
           <el-submenu index="3">

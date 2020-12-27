@@ -86,15 +86,13 @@ export default {
           .catch(function (error) {
             if (error.response) {
               status = error.response.status;
-              msg = error.response.data.detail;
+              msg = error.response.data.non_field_errors;
             }
           })
 
         if (status !== 200) {
           alert(msg)
-          //this.$message.info(msg);
         } else {
-          //let newToken = "bearer " + result.data.token;
           var name = "csrftoken=";
           var ca = document.cookie.split(';');
           for (var i = 0; i < ca.length; i++) {
