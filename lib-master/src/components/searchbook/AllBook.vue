@@ -132,8 +132,9 @@ export default {
     var _this = this   //很重要！！
     this.$http.get('/api/v1/book/')
       .then(function (res) {
-        console.log(res.data);
         _this.tableData = res.data
+        console.log(_this.tableData)
+        console.log(this.tableData)
       })
       .catch(function (error) {
         console.log(error);
@@ -174,6 +175,7 @@ export default {
       this.dialogFormVisible = true;
     },
     update () {
+      console.log(this.form)
       if (ad === 1) {
         this.$http.patch('/api/v1/book/' + this.form.isbn + '/', this.form)
           .then(function (res) {

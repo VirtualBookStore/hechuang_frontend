@@ -47,12 +47,40 @@
             <!-- 点击编辑进入编辑页面进行编辑表格数据 -->
             <el-button
               size="small"
-              @click="
-                editData(scope.$index, scope.row)
-                purchase()
-              "
+              @click="editData(scope.$index, scope.row)"
+              v-if="!isSure"
               >购买</el-button
             >
+            <el-button
+              size="small"
+              @click="
+                purchase()
+                isSure = false
+                PayDialogVisible = true
+              "
+              v-else
+              >确认支付</el-button
+            >
+            <el-dialog
+              title="购买提示"
+              :visible.sync="PayDialogVisible"
+              width="30%"
+              center
+            >
+              <p>您确定要购买该商品吗？确定后您将为其付款</p>
+              <span>商品名称：{{ title }} 价格：{{ price }}</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="PayDialogVisible = false">取 消</el-button>
+                <el-button
+                  type="primary"
+                  @click="
+                    PayDialogVisible = false
+                    paySuccess()
+                  "
+                  >确 定</el-button
+                >
+              </span>
+            </el-dialog>
           </template>
         </el-table-column>
       </el-table>
@@ -71,13 +99,17 @@
 export default {
   data() {
     return {
+      isSure: false,
       isbn: [],
       loading: true,
       tableData: [],
       search: '',
+      title: '',
+      price: 0,
       form: {},
       searchlist: [],
       searchdialogvisible: true,
+      PayDialogVisible: false,
       //图书表单数据绑定
       bookForm: {
         reader_id: '',
@@ -98,6 +130,7 @@ export default {
       .then(function(res) {
         console.log(res.data)
         _this.tableData = res.data
+        console.log('asdasdsadata' + _this.tableData)
       })
       .catch(function(error) {
         console.log(error)
@@ -110,6 +143,12 @@ export default {
     }, 1500)
   },
   methods: {
+    paySuccess() {
+      this.$message({
+        message: '购买成功，谢谢您的支持！',
+        type: 'success',
+      })
+    },
     //转换“是否推荐”的格式
     recommendedFormat(row, column) {
       if (row.recommended === false) {
@@ -119,16 +158,21 @@ export default {
       }
     },
     editData(index, row) {
+      console.log('index:' + index)
       this.form = this.tableData[index]
-      console.log('form:' + this.form)
+      console.log('form:' + this.form.price)
+      this.isSure = true
+      console.log(this.form)
+      this.title = this.form.title
+      this.price = this.form.price
     },
     purchase() {
       this.$http({
         method: 'post',
-        url: '/api/v1/book/' + this.isbn + '/purchase/',
+        url: '/api/v1/book/' + this.form.isbn + '/purchase',
         params: {
           data: this.form,
-          isbn: this.form.isbn,
+          // isbn: this.form.isbn,
         },
       })
         .then((res) => {

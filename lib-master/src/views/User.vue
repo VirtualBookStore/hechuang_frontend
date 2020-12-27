@@ -28,9 +28,9 @@
           <el-submenu index="2">
             <template slot="title"><p class="sub-title">书店商城</p></template>
             <el-menu-item index="/AllBook1">浏览全部书籍</el-menu-item>
-            <!-- <el-menu-item index="/BookReview">书籍推荐阅览</el-menu-item> -->
+            <el-menu-item index="/BookRecycle">申请回收书籍</el-menu-item>
             <el-menu-item index="/SearchBox1">搜索书籍</el-menu-item>
-            <el-menu-item index="/BookBorrows">填写</el-menu-item>
+            <!-- <el-menu-item index="/BookBorrows">填写  </el-menu-item> -->
             <!-- <el-menu-item index="/s">浏览借阅记录</el-menu-item> -->
             <!-- <el-menu-item index="/BookExborrow">续借书籍</el-menu-item> -->
             <!-- <el-menu-item index="/BookReserve">书籍预约</el-menu-item> -->
@@ -118,7 +118,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
 .header-name {
   display: flex;
   justify-content: center;

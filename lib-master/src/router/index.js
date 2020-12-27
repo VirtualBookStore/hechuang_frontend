@@ -23,6 +23,7 @@ import readerlist from '../components/adminHome/readerlist'
 import search from '../components/adminHome/search'
 import s from '../components/adminHome/s'
 //book页面和他的组件
+import BookRecycle from '../components/commonForUser/BookRecycle'
 import BookingWelcome from '../components/booking/BookingWelcome'
 import BookBorrows from '../components/booking/BookBorrows'
 import BookReserve from '../components/booking/BookReserve'
@@ -100,6 +101,7 @@ const routes = [
       { path: '/BookReturns', component: BookReturns },
       { path: '/BookExborrow', component: BookExborrow },
       { path: '/BookReview', component: BookReview },
+      { path: '/BookRecycle', component: BookRecycle },
       { path: '/SearchBox1', component: SearchBox1 },
       { path: '/AllBook1', component: AllBook1 },
       { path: '/RoomList1', component: RoomList1 },
@@ -121,17 +123,21 @@ router.beforeEach((to, from, next) => {
   // to:要访问的路径
   // from从哪个路径来的
   // next代表放行
-  if (to.path === '/login' || to.path === '/studentRegister' || to.path === '/welcome' || to.path === '/returns' || to.path === '/borrows') {
-    return next();
-  }
-  else {
+  if (
+    to.path === '/login' ||
+    to.path === '/studentRegister' ||
+    to.path === '/welcome' ||
+    to.path === '/returns' ||
+    to.path === '/borrows'
+  ) {
+    return next()
+  } else {
     //    获取token
     //let token = window.sessionStorage.getItem("token");
     //if (!token) return next("/login");
     //else return next();
-    return next();
+    return next()
   }
-});
-
+})
 
 export default router

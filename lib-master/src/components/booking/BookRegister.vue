@@ -41,7 +41,6 @@
 </template>
 
 <script>
-
     export default {
     	data(){
     		return {
@@ -65,68 +64,66 @@
     			},
     		}
     	},
-    	created(){
-            
-    	},
+
     	computed: {
     	},
     	methods: {
     		
-		    returns(returnForm){
-		    	this.$refs[returnForm].validate(async (valid) => {
-					if (valid) {
-						let place = parseInt(this.returnForm.pid);
+		    // returns(returnForm){
+		    // 	this.$refs[returnForm].validate(async (valid) => {
+				// 	if (valid) {
+				// 		let place = parseInt(this.returnForm.pid);
 						
-						let Token = window.sessionStorage.getItem('token');
-						const data = {
-							book_name: this.returnForm.name,
-							author: this.returnForm.aname,
-							publishing_house:this.returnForm.pname,
-							isbn:this.returnForm.isbn,
-							publication_date:this.returnForm.time_slot_id,
-							introduction:this.returnForm.intro,
-							state:0,
-							place_id:place,
-						}
-						try{
-							const result = await this.$http.post('/apip/api/books',data,{
-                    hearders: {
-                        'Authorization': Token,
-                    },}).catch(function (error)
-                    {
-                        if (error.response)
-                        {
-                            status = error.response.status;
-                            msg = error.response.data.msg;
-                        }
-                    });
-					console.log(result.data.id);		
-							if (result.data.id != 0) {
-								console.log(result)
-								this.$message({
-					            	type: 'success',
-					            	message: 'registration succeed',
-					          	});window.location.reload();
-							}else{
-								this.$message({
-					            	type: 'error',
-					            	message: 'registration failed',
+				// 		let Token = window.sessionStorage.getItem('token');
+				// 		const data = {
+				// 			book_name: this.returnForm.name,
+				// 			author: this.returnForm.aname,
+				// 			publishing_house:this.returnForm.pname,
+				// 			isbn:this.returnForm.isbn,
+				// 			publication_date:this.returnForm.time_slot_id,
+				// 			introduction:this.returnForm.intro,
+				// 			state:0,
+				// 			place_id:place,
+				// 		}
+				// 		try{
+				// 			const result = await this.$http.post('/apip/api/books',data,{
+        //             hearders: {
+        //                 'Authorization': Token,
+        //             },}).catch(function (error)
+        //             {
+        //                 if (error.response)
+        //                 {
+        //                     status = error.response.status;
+        //                     msg = error.response.data.msg;
+        //                 }
+        //             });
+				// 	console.log(result.data.id);		
+				// 			if (result.data.id != 0) {
+				// 				console.log(result)
+				// 				this.$message({
+				// 	            	type: 'success',
+				// 	            	message: 'registration succeed',
+				// 	          	});window.location.reload();
+				// 			}else{
+				// 				this.$message({
+				// 	            	type: 'error',
+				// 	            	message: 'registration failed',
 									
-					          	});window.location.reload();
-							}
-						}catch(err){
-							console.log(err)
-						}
-					} else {
-						this.$notify.error({
-							title: 'error',
-							message: 'Please check register info',
-							offset: 100
-						});
-						return false;
-					}
-				});
-		    }
+				// 	          	});window.location.reload();
+				// 			}
+				// 		}catch(err){
+				// 			console.log(err)
+				// 		}
+				// 	} else {
+				// 		this.$notify.error({
+				// 			title: 'error',
+				// 			message: 'Please check register info',
+				// 			offset: 100
+				// 		});
+				// 		return false;
+				// 	}
+				// });
+		    // }
 		}
     }</script>
 
