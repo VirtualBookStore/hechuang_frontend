@@ -1,143 +1,132 @@
 <template>
-  <el-table :data="tableData"
-            border
-            style="width: 100%">
-    <el-table-column fixed
-                     prop="date"
-                     label="日期"
-                     width="150">
-    </el-table-column>
-    <el-table-column prop="name"
-                     label="用户名"
-                     width="120">
-    </el-table-column>
-    <el-table-column prop="province"
-                     label="订单"
-                     width="120">
-    </el-table-column>
-    <el-table-column prop="city"
-                     label="书籍"
-                     width="120">
-    </el-table-column>
-    <el-table-column prop="address"
-                     label="地址"
-                     width="300">
-    </el-table-column>
-    <el-table-column prop="zip"
-                     label="邮编"
-                     width="120">
-    </el-table-column>
-    <el-table-column fixed="right"
-                     label="操作"
-                     width="100">
-      <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)"
-                   type="text"
-                   size="small">查看</el-button>
-        <el-button type="text"
-                   size="small">编辑</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div class="basetable"
+       v-loading="loading"
+       element-loading-text="拼命加载中">
+    <!-- v-loading 设置加载 -->
+    <div class="tableMain">
+      <el-table :data="tableData"
+                style="width: 100%">
+        <el-table-column prop="isbn"
+                         label="isbn"
+                         min-width="70%"></el-table-column>
+        <el-table-column prop="title"
+                         label="书名"
+                         min-width="70%"></el-table-column>
+        <el-table-column prop="description"
+                         label="描述"
+                         min-width="90%"></el-table-column>
+        <el-table-column prop="price"
+                         label="价格"
+                         min-width="40%"></el-table-column>
+        <el-table-column prop="new_total"
+                         label="新书库存"
+                         min-width="50%"></el-table-column>
+        <el-table-column prop="old_total"
+                         label="旧书库存"
+                         min-width="50%"></el-table-column>
+        <el-table-column prop="recommended"
+                         label="是否被推荐"
+                         :formatter="recommendedFormat"
+                         min-width="60%"></el-table-column>
+        <el-table-column label="操作">
+          <template slot="header"
+                    slot-scope="scope">
+            <el-input v-model="search"
+                      size="mini"
+                      placeholder="输入关键字搜索" />
+          </template>
+          <template slot-scope="scope">
+            <el-button size="small"
+                       @click="agree">同意</el-button>
+            <el-button size="small"
+                       @click="disagree">拒绝</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
+var ad = 1;
 export default {
   data () {
     return {
-      RoomForm: JSON.parse(window.sessionStorage.getItem('rea')),
-    }
+      loading: true,
+      //   表格的数据
+      tableData: [],
+      dialogFormVisible: false,
+      formLabelWidth: "80px",
+      // 设置form用于进行添加的时候绑定值
+      form: {},
+      value6: "",
+      currentPage3: 1,
+      currentIndex: "",
+    };
+  },
+  mounted: function () {
+    var _this = this   //很重要！！
+    this.$http.get('/api/v1/book/')
+      .then(function (res) {
+        console.log(res.data);
+        _this.tableData = res.data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   },
   created () {
-    this.roomshow();
+    //   设置回调函数，进行1.5秒的loading动画显示
+    setTimeout(() => {
+      this.loading = false;
+    }, 1500);
   },
   methods: {
-    //异步操作
-    tableRowStyle ({ row, rowIndex }) {
-      return 'background-color:pink;font-size:10px;'
+    showTime () {
+      this.$alert(this.value6, "起止时间", {
+        confirmButtonText: "确定",
+        callback: action => {
+          this.$message({
+            type: "info",
+            message: "已显示"
+          });
+        }
+      });
     },
-    //设置表头行的样式
-    tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
-      return 'background-color:#eef1f6;color:#313131;font-wight:500;font-size:15px;text-align:center'
-
-    },
-    tableRowClassName ({ row, rowIndex }) {
-      if (rowIndex === 1) {
-        return 'warning-row';
-      } else if (rowIndex === 3) {
-        return 'success-row';
+    recommendedFormat (row, column) {
+      if (row.recommended === false) {
+        return '未在推荐'
+      } else {
+        return '正在推荐'
       }
-      return '';
     },
-    roomshow () {
-      let status = 200;
-      let Token = window.sessionStorage.getItem('token');
-      this.$http.get('/apip/api/recommendations', {
-        hearders: {
-          'Authorization': Token,
-        },
-      })
-        .then(function (response) {
-          var data = JSON.stringify(response.data);
-          //    alert(data);
-          window.sessionStorage.setItem('rea', data);
-        }).catch(function (response) {
-          console.log(response);
+    update () {
+      this.$http.patch('/api/v1/book/' + this.form.isbn + '/', this.form)
+        .then(function (res) {
+          console.log(res.data);
+        })
+        .catch(function (error) {
+          console.log(error);
         });
+      location.reload();
+    },
+    handleEdit (index, row) {
+      // 将数据的index传递过来用于实现数据的回显
+      this.form = this.tableData[index];
+      this.currentIndex = index;
+      // 设置对话框的可见
+      this.dialogFormVisible = true;
+    },
+    cancel () {
+      // 取消的时候直接设置对话框不可见即可
+      this.dialogFormVisible = false;
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`);
     }
-    // alert(window.sessionStorage.getItem('dat').data.);
   }
-}
+};
 </script>
-
-<style lang="less">
-@import "../style/mixin";
-
-.el-table .warning-row {
-  background: oldlace;
-}
-
-.el-table .success-row {
-  background: #f0f9eb;
-}
-
-.form_header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: #20a0ff;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  text-align: center;
-}
-
-.avatar {
-  width: 120px;
-  height: 120px;
-  display: block;
-}
-
-.el-table .info-row {
-  background: #c9e5f5;
-}
-
-.el-table .positive-row {
-  background: #e2f0e4;
-}
-</style>

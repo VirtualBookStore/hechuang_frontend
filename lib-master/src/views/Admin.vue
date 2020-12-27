@@ -27,7 +27,7 @@
             <template slot="title">
               <p class="sub-title">读者管理</p>
             </template>
-            <el-menu-item index="/readerlist">获取读者列表</el-menu-item>
+            <el-menu-item index="/readerlist">网站信息修改</el-menu-item>
             <el-menu-item index="/AdminChangeUserInfo">修改用户信息</el-menu-item>
             <el-menu-item index="/AdminChangeUserPassword">修改用户密码</el-menu-item>
           </el-submenu>

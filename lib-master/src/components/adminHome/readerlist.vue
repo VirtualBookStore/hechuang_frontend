@@ -1,81 +1,108 @@
 <template>
-  <div class="reader_reserves">
-    <el-row style="margin-top: 20px;">
-      <el-col :span="40"
-              :offset="2">
-        <header class="form_header"><h1>读者列表</h1></header>
-        <el-table :data="readerForm"
-				  style="width: 62.5rem"
-				  border :stripe="true"
-				  :row-style="tableRowStyle"
-				  :header-cell-style="tableHeaderColor"
-                  :row-class-name="tableRowClassName">
-          <el-table-column prop="id"
-                           label="ID"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="name"
-                           label="用户名">
-          </el-table-column>
-          <el-table-column prop="contact"
-                           label="联系电话">
-          </el-table-column>
-          <el-table-column prop="gender"
-                           label="性别">
-          </el-table-column>
-          <el-table-column prop="credit_Score"
-                           label="信用分"
-                           width="180">
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
+  <div class="all-container">
+    <el-form :model="ruleForm"
+             status-icon
+             :rules="rules"
+             ref="ruleForm"
+             label-width="100px"
+             class="demo-ruleForm"
+             style="margin-left:200px;margin-top:120px;">
+      <el-form-item label="出版商邮箱"
+                    prop="publisher_email">
+        <el-input v-model.number="ruleForm.publisher_email"
+                  style="width:300px;"></el-input>
+      </el-form-item>
+      <el-form-item label="管理员邮箱"
+                    prop="manager_email">
+        <el-input v-model.number="ruleForm.manager_email"
+                  style="width:300px;"></el-input>
+      </el-form-item>
+      <el-form-item label="折扣率"
+                    prop="discount_rate">
+        <el-input v-model.number="ruleForm.discount_rate"
+                  style="width:300px;"
+                  type="number"></el-input>
+      </el-form-item>
+      <el-form-item label="折旧率"
+                    prop="old_rate">
+        <el-input v-model.number="ruleForm.old_rate"
+                  style="width:300px;"
+                  type="number"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary"
+                   @click="submitForm('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
   </div>
-
 </template>
-
 <script>
 export default {
   data () {
+    /*var checknum = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('联系方式不能为空'))
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数字值'))
+        } else {
+          if (value.toString().length !== 11) {
+            callback(new Error('必须为11位数'))
+          } else {
+            callback()
+          }
+        }
+      }, 1000)
+    }
+    var check = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入内容'))
+      } else { callback() }
+    }*/
     return {
-      readerForm: JSON.parse(window.sessionStorage.getItem('rdlist')),
+      ruleForm: []
     }
   },
-  created () {
-    this.readershow();
+  mounted: function () {
+    var _this = this   //很重要！！
+    this.$http.get('/api/v1/config/')
+      .then(function (res) {
+        console.log(res.data);
+        _this.ruleForm = res.data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   },
   methods: {
-	  tableRowStyle({row,rowIndex}){
-	                  return 'background-color:pink;font-size:10px;'
-	              },
-	              //设置表头行的样式
-	              tableHeaderColor({row,column,rowIndex,columnIndex}){
-	                  return 'background-color:#eef1f6;color:#313131;font-wight:500;font-size:15px;text-align:center'
-	  
-	              },
-    tableRowClassName ({ row, rowIndex }) { },
-    readershow () {
-      let Token = window.sessionStorage.getItem('token');
-      this.$http.get('/apip/api/adminop/getreaderlist ', {
-        hearders: {
-          'Authorization': Token,
-        },
-      })
-        .then(function (response) {
-          var data = JSON.stringify(response.data);
-          var len = data.length;
-          data = data.substring(27, len - 1);
-          window.sessionStorage.setItem('rdlist', data);
-        }).catch(function (response) {
-          console.log(response);
-        });
+    submitForm (formName) {
+      var _this = this
+      if (_this.ruleForm.discount_rate >= 1) {
+        alert("折扣率不能超过1")
+        location.reload();
+      }
+      else if (_this.ruleForm.old_rate >= 1) {
+        alert("折旧率不能超过1")
+        location.reload();
+      }
+      else {
+        this.$http.put('/api/v1/config/', _this.ruleForm)
+          .then(function (res) {
+            console.log(res.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        location.reload();
+      }
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
 </script>
-<style>
-	.reader_reserves {
-		background-color:white;
-	}
-
+<style scoped>
 </style>

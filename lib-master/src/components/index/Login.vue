@@ -103,11 +103,11 @@ export default {
           }
           alert(newToken);
           window.sessionStorage.setItem('token', newToken);
-          await this.$router.push({ path: '/Admin' });
-          // if (key < 10000)
-          //       await this.$router.push({ path: '/Admin' });
-          //    else
-          //     await this.$router.push({ path: '/User' });
+
+          if (key === 'admin')
+            await this.$router.push({ path: '/Admin' });
+          else
+            await this.$router.push({ path: '/User' });
 
           // if (newToken != "undefined")
           // {

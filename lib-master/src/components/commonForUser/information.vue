@@ -1,87 +1,111 @@
 <template>
-  <div class="room_reserves">
-    <el-row style="margin-top: 20px;">
-      <el-col :span="40"
-              :offset="2">
-        <header class="form_header"><h1>用户基本信息</h1></header>
-        <el-table :data="inForm"
-                  style="width: 1000px"
-				  border :stripe="true"
-				  :row-style="tableRowStyle"
-				  :header-cell-style="tableHeaderColor"
-                  :row-class-name="tableRowClassName">
-          <el-table-column prop="ID"
-                           label="ID">
-          </el-table-column>
-          <el-table-column prop="Name"
-                           label="用户名">
-          </el-table-column>
-          <el-table-column prop="Contact"
-                           label="联系电话">
-          </el-table-column>
-          <el-table-column prop="Gender"
-                           label="性别">
-          </el-table-column>
-          <el-table-column prop="Credit_Score"
-                           label="信用分">
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
+  <div class="all-container">
+    <el-form :model="ruleForm"
+             status-icon
+             :rules="rules"
+             ref="ruleForm"
+             label-width="100px"
+             class="demo-ruleForm"
+             style="margin-left:200px;margin-top:120px;">
+      <el-form-item label="用户名"
+                    prop="username">
+        <el-input v-model.number="ruleForm.username"
+                  style="width:300px;"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱"
+                    prop="email">
+        <el-input v-model.number="ruleForm.email"
+                  style="width:300px;"></el-input>
+      </el-form-item>
+      <el-form-item label="名"
+                    prop="first_name">
+        <el-input v-model.number="ruleForm.first_name"
+                  style="width:300px;"></el-input>
+      </el-form-item>
+      <el-form-item label="姓"
+                    prop="last_name">
+        <el-input v-model.number="ruleForm.last_name"
+                  style="width:300px;"></el-input>
+      </el-form-item>
+      <el-form-item label="地址"
+                    prop="address">
+        <el-input v-model.number="ruleForm.address"
+                  style="width:300px;"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary"
+                   @click="submitForm('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
   </div>
-
 </template>
-
 <script>
 export default {
   data () {
+    /*var checknum = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('联系方式不能为空'))
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数字值'))
+        } else {
+          if (value.toString().length !== 11) {
+            callback(new Error('必须为11位数'))
+          } else {
+            callback()
+          }
+        }
+      }, 1000)
+    }
+    var check = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入内容'))
+      } else { callback() }
+    }*/
     return {
-      inForm: JSON.parse(window.sessionStorage.getItem('rme')),
+      ruleForm: []
     }
   },
-  created () {
-    this.infshow();
+  mounted: function () {
+    var _this = this   //很重要！！
+    this.$http.get('/api/v1/profile/')
+      .then(function (res) {
+        console.log(res.data);
+        _this.ruleForm = res.data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   },
   methods: {
-	  tableRowStyle({row,rowIndex}){
-	                  return 'background-color:pink;font-size:10px;'
-	              },
-	              //设置表头行的样式
-	              tableHeaderColor({row,column,rowIndex,columnIndex}){
-	                  return 'background-color:#eef1f6;color:#313131;font-wight:500;font-size:15px;text-align:center'
-	  
-	              },
-    tableRowClassName ({ row, rowIndex }) { },
-    infshow () {
-      let Token = window.sessionStorage.getItem('token');
-      this.$http.get('/apip/api/home/info', {
-        hearders: {
-          'Authorization': Token,
-        },
-      })
-        .then(function (response) {
-          var data = JSON.stringify(response.data);
-          window.sessionStorage.setItem('rme', data);
-        }).catch(function (response) {
-          console.log(response);
-        });
+    submitForm (formName) {
+      var _this = this
+      if (_this.ruleForm.discount_rate >= 1) {
+        alert("折扣率不能超过1")
+        location.reload();
+      }
+      else if (_this.ruleForm.old_rate >= 1) {
+        alert("折旧率不能超过1")
+        location.reload();
+      }
+      else {
+        this.$http.put('/api/v1/config/', _this.ruleForm)
+          .then(function (res) {
+            console.log(res.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        location.reload();
+      }
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
 </script>
-<style>
-	.room_reserves {
-		/* height: 200%;
-		width: 100%; */
-		background-size: cover;
-		background-color:white;
-	    /* background: url(../../assets/img/head_bg.jpg) top center; */
-	        /* background-attachment: scroll;
-	    background-attachment: fixed; */
-	    height: 1018px;
-	    padding-top: 32px;
-	}
-	.el-main{
-		padding:0px;
-	}
+<style scoped>
 </style>
