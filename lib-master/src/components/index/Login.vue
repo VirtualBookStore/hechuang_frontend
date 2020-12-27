@@ -7,26 +7,27 @@
       </h1>
       <p>合创书店，一个为书籍爱好者设计的集购买、回收于一体的网上书店。</p>
     </div>
-    <transition name="form-fade" mode="in-out">
+    <transition name="form-fade"
+                mode="in-out">
       <section class="formCon">
-        <el-form
-          ref="loginFormRef"
-          :model="loginForm"
-          :rules="loginFormRules"
-          label-width="100px"
-        >
-          <el-form-item prop="username" label="用户ID">
-            <el-input v-model="loginForm.username" placeholder="ID"></el-input>
+        <el-form ref="loginFormRef"
+                 :model="loginForm"
+                 :rules="loginFormRules"
+                 label-width="100px">
+          <el-form-item prop="username"
+                        label="用户ID">
+            <el-input v-model="loginForm.username"
+                      placeholder="ID"></el-input>
           </el-form-item>
-          <el-form-item prop="password" label="密码">
-            <el-input
-              type="password"
-              v-model="loginForm.password"
-              placeholder="密码"
-            ></el-input>
+          <el-form-item prop="password"
+                        label="密码">
+            <el-input type="password"
+                      v-model="loginForm.password"
+                      placeholder="密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="login">登录</el-button>
+            <el-button type="primary"
+                       @click="login">登录</el-button>
             <el-button>忘记密码</el-button>
           </el-form-item>
         </el-form>
@@ -36,7 +37,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       //登录表单数据绑定
       loginForm: {
@@ -70,7 +71,7 @@ export default {
   },
   methods: {
     //异步操作
-    login() {
+    login () {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return
         let msg = ''
@@ -82,23 +83,27 @@ export default {
             username: key,
             password: pass,
           })
-          .catch(function(error) {
+          .catch(function (error) {
             if (error.response) {
-              status = error.response.status
-              msg = error.response.data.non_field_errors
+              status = error.response.status;
+              msg = error.response.data.non_field_errors;
             }
           })
 
-        if (status === 400) {
+        if (status !== 200) {
           alert(msg)
-          //this.$message.info(msg);
         } else {
-          //let newToken = "bearer " + result.data.token;
-          let newToken = result.data.key
-          window.sessionStorage.setItem('token', newToken)
-          // document.cookie=
-
-          await this.$router.push({ path: '/Admin' })
+          var name = "csrftoken=";
+          var ca = document.cookie.split(';');
+          for (var i = 0; i < ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(name) == 0) {
+              var newToken = c.substring(name.length, c.length);
+            }
+          }
+          alert(newToken);
+          window.sessionStorage.setItem('token', newToken);
+          await this.$router.push({ path: '/Admin' });
           // if (key < 10000)
           //       await this.$router.push({ path: '/Admin' });
           //    else

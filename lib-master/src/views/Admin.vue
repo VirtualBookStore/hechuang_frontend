@@ -36,10 +36,10 @@
               <p class="sub-title">图书管理</p>
             </template>
             <el-menu-item index="/BookReviewAdmin">审核回收申请</el-menu-item>
-            <el-menu-item index="/AllBook">确认回收书籍</el-menu-item>
-            <el-menu-item index="/SearchBox">管理库存</el-menu-item>
+            <el-menu-item index="/SearchBox">确认回收书籍</el-menu-item>
+            <el-menu-item index="/AllBook">管理书籍库存信息</el-menu-item>
             <el-menu-item index="/BookRegister">确认补货</el-menu-item>
-            <el-menu-item index="/BookReturns">归还书籍</el-menu-item>
+            <el-menu-item index="/BookReturns">设置促销</el-menu-item>
             <el-menu-item index="arch">搜索借阅记录</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
@@ -83,10 +83,10 @@ export default {
   },
   methods: {
     bookcategory () {
-      let status = 200
+      /* let status = 200
       let Token = window.sessionStorage.getItem('token')
       this.$http
-        .get('/apip/api/books/', {
+        .get('/api/api/books/', {
           hearders: {
             Authorization: Token,
           },
@@ -98,15 +98,26 @@ export default {
         })
         .catch(function (response) {
           console.log(response)
-        })
+        }) */
     },
     //退出按钮
     logout () {
-      window.sessionStorage.clear()
-      this.$router.push('index')
-    },
-  },
+      {
+        var status = 0;
+        this.$http.post('/api/v1/auth/logout/')
+          .then(function (res) {
+            console.log("ture");
+          })
+          .catch(function (error) {
+          });
+        window.sessionStorage.clear();
+        this.$router.push('index')
+      }
+    }
+  }
+
 }
+
 </script>
 
 <style scoped>

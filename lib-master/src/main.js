@@ -21,17 +21,16 @@ Vue.prototype.$http = axios
 axios.defaults.baseURL = '/'
 
 //拦截器 发送请求前,会发送一个token
-axios.interceptors.request.use(config =>
-{
-    config.headers.authorization = window.sessionStorage.getItem('token');
-    return config;
+axios.interceptors.request.use(config => {
+  config.headers['X-CSRFToken'] = window.sessionStorage.getItem('token');
+  return config;
 })
 
 
 Vue.config.productionTip = false
 
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')
