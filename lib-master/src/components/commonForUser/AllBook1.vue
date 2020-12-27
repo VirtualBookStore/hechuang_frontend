@@ -1,5 +1,9 @@
 <template>
-  <div class="book_search">
+  <div
+    class="book_search"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+  >
     <header class="form_header"></header>
     <el-form
       ref="bookFormRef"
@@ -8,33 +12,57 @@
       label-width="110px"
       class="demo-now_Data"
     >
-      <el-button
-        type="primary"
-        @click="search"
-        class="submit_btn"
-        v-if="searchdialogvisible"
-        >点击获得所有图书商品信息</el-button
-      >
     </el-form>
 
     <!-- //todo:此处所需要的值应在props或data中建立，调用接口取出数据 -->
     <div class="book-info">
-      <el-table :data="searchlist" style="width: 100%" border :stripe="true">
+      <el-table
+        :data="
+          tableData.filter(
+            (data) =>
+              !search || data.title.toLowerCase().includes(search.toLowerCase())
+          )
+        "
+        style="width: 100%"
+        border
+        :stripe="true"
+      >
         <el-table-column
-          prop="book_name"
-          label="书名"
-          width="120"
+          prop="isbn"
+          label="ISBN"
+          v-model="isbn"
         ></el-table-column>
-        <el-table-column prop="id" label="ISBN"></el-table-column>
-        <el-table-column prop="place_id" label="简介"></el-table-column>
-        <el-table-column prop="publishing_house" label="价格"></el-table-column>
-        <el-table-column prop="introduction" label="新书数量"></el-table-column>
+        <el-table-column prop="title" label="书名"></el-table-column>
+        <el-table-column prop="description" label="简介"></el-table-column>
+        <el-table-column prop="price" label="价格"></el-table-column>
+        <el-table-column prop="new_total" label="新书数量"></el-table-column>
+        <el-table-column prop="old_total" label="旧书数量"></el-table-column>
         <el-table-column
-          prop="publication_date"
-          label="旧书数量"
+          prop="recommended"
+          label="是否推荐"
+          :formatter="recommendedFormat"
         ></el-table-column>
-        <!-- <el-table-column prop="isbn" label="是否推荐"></el-table-column> -->
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <!-- 点击编辑进入编辑页面进行编辑表格数据 -->
+            <el-button
+              size="small"
+              @click="
+                editData(scope.$index, scope.row)
+                purchase()
+              "
+              >购买</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
+    </div>
+    <div class="page">
+      <el-pagination
+        :page-size="100"
+        layout="prev, pager, next, jumper"
+        :total="1000"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -43,6 +71,11 @@
 export default {
   data() {
     return {
+      isbn: [],
+      loading: true,
+      tableData: [],
+      search: '',
+      form: {},
       searchlist: [],
       searchdialogvisible: true,
       //图书表单数据绑定
@@ -58,34 +91,52 @@ export default {
       },
     }
   },
-  methods: {
-    //异步操作
-    search() {
-      this.$refs.bookFormRef.validate(async (valid) => {
-        if (!valid) return
-        let msg = ''
-        let status = 200
-        let key = this.bookForm.reader_id
-        let Token = window.sessionStorage.getItem('token') //this.$message.info("The database isn't ready.");
-        let result = await this.$http
-          .get('/apip/api/books', {
-            hearders: {
-              Authorization: Token,
-            },
-          })
-          .catch(function(error) {
-            if (error.response) {
-              status = error.response.status
-              msg = error.response.data.msg
-            }
-          })
-        this.searchlist = result.data
-        if (status === 400) {
-          this.$message.info('该人不存在 !')
-        }
+  mounted: function() {
+    var _this = this //很重要！！
+    this.$http
+      .get('/api/v1/book/')
+      .then(function(res) {
+        console.log(res.data)
+        _this.tableData = res.data
       })
-
-      this.searchdialogvisible = false
+      .catch(function(error) {
+        console.log(error)
+      })
+  },
+  created() {
+    //   设置回调函数，进行1.5秒的loading动画显示
+    setTimeout(() => {
+      this.loading = false
+    }, 1500)
+  },
+  methods: {
+    //转换“是否推荐”的格式
+    recommendedFormat(row, column) {
+      if (row.recommended === false) {
+        return '未在推荐'
+      } else {
+        return '正在推荐'
+      }
+    },
+    editData(index, row) {
+      this.form = this.tableData[index]
+      console.log('form:' + this.form)
+    },
+    purchase() {
+      this.$http({
+        method: 'post',
+        url: '/api/v1/book/' + this.isbn + '/purchase/',
+        params: {
+          data: this.form,
+          isbn: this.form.isbn,
+        },
+      })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
   },
 }

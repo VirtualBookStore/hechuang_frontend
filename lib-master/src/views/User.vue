@@ -10,7 +10,8 @@
       <!--                {{username}}-->
       <!--            </div>-->
       <div class="out-button">
-        <el-button @click="logout" size="medium" round> 退出</el-button>
+        <!-- //todo:登出按钮功能还未实现 -->
+        <el-button size="medium" round> 退出</el-button>
       </div>
     </el-header>
     <!--        页面主体-->
@@ -25,14 +26,14 @@
             <el-menu-item index="/AdminChangePass1">修改密码</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template slot="title"><p class="sub-title">商城</p></template>
-            <el-menu-item index="/BookReview">书籍推荐阅览</el-menu-item>
-            <el-menu-item index="/SearchBox1">搜索书籍</el-menu-item>
+            <template slot="title"><p class="sub-title">书店商城</p></template>
             <el-menu-item index="/AllBook1">浏览全部书籍</el-menu-item>
-            <el-menu-item index="/BookBorrows">借阅书籍</el-menu-item>
-            <el-menu-item index="/s">浏览借阅记录</el-menu-item>
-            <el-menu-item index="/BookExborrow">续借书籍</el-menu-item>
-            <el-menu-item index="/BookReserve">书籍预约</el-menu-item>
+            <!-- <el-menu-item index="/BookReview">书籍推荐阅览</el-menu-item> -->
+            <el-menu-item index="/SearchBox1">搜索书籍</el-menu-item>
+            <el-menu-item index="/BookBorrows">填写</el-menu-item>
+            <!-- <el-menu-item index="/s">浏览借阅记录</el-menu-item> -->
+            <!-- <el-menu-item index="/BookExborrow">续借书籍</el-menu-item> -->
+            <!-- <el-menu-item index="/BookReserve">书籍预约</el-menu-item> -->
             <el-menu-item index="/BookReviewUser"
               >用户推荐书籍查询</el-menu-item
             >
@@ -65,68 +66,10 @@ export default {
     }
   },
   mounted: function() {
-    this.warnings()
-    this.bookcategory()
+    // this.warnings()
+    // this.bookcategory()
   },
-  methods: {
-    warnings() {
-      window.sessionStorage.setItem('bookable', 'true')
-      let Token = window.sessionStorage.getItem('token')
-      let result1 = this.$http.get('/apip/api/home/tips/', {
-        hearders: {
-          Authorization: Token,
-        },
-      })
-      if (result1.data == 'false') {
-        window.sessionStorage.setItem('bookable', 'false')
-      }
-      let result2 = this.$http.get('/apip/api/home/tips/', {
-        hearders: {
-          Authorization: Token,
-        },
-      })
-      if (result2.data == 'true') {
-        alert('你有超期书籍未归还！')
-      }
-    },
-
-    bookcategory() {
-      let status = 200
-      let Token = window.sessionStorage.getItem('token')
-      this.$http
-        .get('/apip/api/books/', {
-          hearders: {
-            Authorization: Token,
-          },
-        })
-        .then(function(response) {
-          var data = JSON.stringify(response.data)
-          // alert(data);
-          window.sessionStorage.setItem('book', data)
-        })
-        .catch(function(response) {
-          console.log(response)
-        })
-    },
-    //退出按钮
-    logout() {
-      let status = 200
-      let Token = window.sessionStorage.getItem('token')
-      this.$http.post('/api/v1/auth/logout/').catch(function(error) {
-        if (error.response) {
-          status = error.response.status
-          alert('123')
-          msg = error.response.data.non_field_errors
-        }
-      })
-      if (status === 400) {
-        alert(msg)
-        //this.$message.info(msg);
-      } else {
-        this.$router.push('index')
-      }
-    },
-  },
+  methods: {},
 }
 </script>
 
