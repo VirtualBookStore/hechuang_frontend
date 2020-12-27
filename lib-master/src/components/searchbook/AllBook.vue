@@ -51,6 +51,16 @@
                :visible.sync="dialogFormVisible">
       <!-- 在el-dialog中进行嵌套el-form实现弹出表格的效果 -->
       <el-form :model="form">
+        <el-form-item label="isbn"
+                      :label-width="formLabelWidth">
+          <el-input v-model="form.isbn"
+                    auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="书名"
+                      :label-width="formLabelWidth">
+          <el-input v-model="form.title"
+                    auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="描述"
                       :label-width="formLabelWidth">
           <el-input v-model="form.description"
@@ -94,17 +104,7 @@ export default {
     return {
       loading: true,
       //   表格的数据
-      tableData: [
-        {
-          isbn: "士兵76",
-          title: "男",
-          description: "国王大道",
-          price: "500",
-          new_total: "5",
-          old_total: "5",
-          recommended: "false"
-        }
-      ],
+      tableData: [],
       dialogFormVisible: false,
       formLabelWidth: "80px",
       // 设置form用于进行添加的时候绑定值
@@ -113,6 +113,17 @@ export default {
       currentPage3: 1,
       currentIndex: ""
     };
+  },
+  mounted: function () {
+    var _this = this   //很重要！！
+    this.$http.get('/api/v1/book/')
+      .then(function (res) {
+        console.log(res.data);
+        _this.tableData = res.data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   },
   created () {
     //   设置回调函数，进行1.5秒的loading动画显示
@@ -132,6 +143,21 @@ export default {
         }
       });
     },
+    /* bookcategory () {
+      let status = 200
+      this.$http
+        .get('/api/v1/book/')
+        .then(function (response) {
+          alert(response.data);
+          tableData = response.data;
+          var data = JSON.stringify(response.data)
+          alert(data);
+          window.sessionStorage.setItem('book', data)
+        })
+        .catch(function (response) {
+          console.log(response)
+        })
+    }, */
     // 增加数据的方式，单独的设置一些值，用于增加功能，这些值放在对象里面进行设置，然后将这个新增的对象塞到总数据里面
     add () {
       this.form = {
@@ -144,6 +170,15 @@ export default {
       //   this.form.date = reformat(this.form.date);
       //    可以在html上面进行设置日期的格式化
       //   将我们添加的信息提交到总数据里面
+      this.$http.put('/api/v1/book/' + this.form.isbn + '/', this.form)
+        .then(function (res) {
+          console.log(res.data);
+          _this.tableData = res.data
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
       this.tableData.push(this.form);
       this.dialogFormVisible = false;
     },

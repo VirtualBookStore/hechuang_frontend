@@ -83,10 +83,10 @@ export default {
   },
   methods: {
     bookcategory () {
-      let status = 200
+      /* let status = 200
       let Token = window.sessionStorage.getItem('token')
       this.$http
-        .get('/apip/api/books/', {
+        .get('/api/api/books/', {
           hearders: {
             Authorization: Token,
           },
@@ -98,33 +98,24 @@ export default {
         })
         .catch(function (response) {
           console.log(response)
-        })
+        }) */
     },
     //退出按钮
     logout () {
-      let status = 200;
-      let Token = window.sessionStorage.getItem('token');
-      this.$http.post('/api/v1/auth/logout/', {
-        params: {},
-        hearders: {
-          'X-CSRFToken': Token
-        }
-      }).catch(function (error) {
-        if (error.response) {
-          status = error.response.status;
-          msg = error.response.data.detail;
-        }
-      });
-      if (status !== 200) {
-        alert(msg)
-        //this.$message.info(msg);
-      }
-      else {
-        window.sessionStorage.clear()
-        this.$router.push("index")
+      {
+        var status = 0;
+        this.$http.post('/api/v1/auth/logout/')
+          .then(function (res) {
+            console.log("ture");
+          })
+          .catch(function (error) {
+          });
+        window.sessionStorage.clear();
+        this.$router.push('index')
       }
     }
   }
+
 }
 
 </script>
