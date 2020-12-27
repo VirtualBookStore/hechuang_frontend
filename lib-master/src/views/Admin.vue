@@ -103,15 +103,15 @@ export default {
     //退出按钮
     logout () {
       {
-        var status = 0;
+        var _this = this
         this.$http.post('/api/v1/auth/logout/')
           .then(function (res) {
-            console.log("ture");
+
+            _this.$router.push('index');
+            window.sessionStorage.clear();
           })
           .catch(function (error) {
           });
-        window.sessionStorage.clear();
-        this.$router.push('index')
       }
     }
   }
