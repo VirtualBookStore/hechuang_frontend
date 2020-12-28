@@ -110,6 +110,8 @@ export default {
       searchlist: [],
       searchdialogvisible: true,
       PayDialogVisible: false,
+      Token: window.sessionStorage.getItem('token'),
+
       //图书表单数据绑定
       bookForm: {
         reader_id: '',
@@ -131,6 +133,7 @@ export default {
         console.log(res.data)
         _this.tableData = res.data
         console.log('asdasdsadata' + _this.tableData)
+        console.log("token:"+this.Token)
       })
       .catch(function(error) {
         console.log(error)
@@ -169,10 +172,16 @@ export default {
     purchase() {
       this.$http({
         method: 'post',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': 'true',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Authorization: this.Token,
+        },
         url: '/api/v1/book/' + this.form.isbn + '/purchase',
         params: {
           data: this.form,
-          // isbn: this.form.isbn,
+          isbn: this.form.isbn,
         },
       })
         .then((res) => {
