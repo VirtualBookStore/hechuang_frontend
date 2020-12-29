@@ -64,9 +64,14 @@ export default {
   },
   mounted: function () {
     var _this = this   //很重要！！
-    this.$http.get('/api/v1/recycle/?allowed=true')
+    this.$http.get('/api/v1/recycle/?order__status=80')
       .then(function (res) {
-        _this.tableData = res.data
+        /*        _this.tableData = res.data */
+        for (let order in res.data) {
+          if (res.data[order].order.status === '回收中') {
+            _this.tableData.push(res.data[order])
+          }
+        }
         console.log(res.data)
       })
       .catch(function (error) {
@@ -96,6 +101,7 @@ export default {
       this.$http.patch('/api/v1/order/' + _this.tableData[index].order.id + '/recycle/receive/')
         .then(function (res) {
           console.log(res.data);
+          location.reload();
         })
         .catch(function (error) {
           console.log(error);

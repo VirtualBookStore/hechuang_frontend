@@ -106,13 +106,13 @@ export default {
     },
     agree (index) {
       var _this = this;
-      alert("123");
       this.$http.patch('/api/v1/order/' + _this.tableData[index].order.id + '/recycle/check/',
         {
           allowed: "true"
         })
         .then(function (res) {
           console.log(res.data);
+          location.reload();
         })
         .catch(function (error) {
           console.log(error);
@@ -126,6 +126,7 @@ export default {
         })
         .then(function (res) {
           console.log(res.data);
+          location.reload();
         })
         .catch(function (error) {
           console.log(error);

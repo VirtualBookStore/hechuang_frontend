@@ -11,15 +11,21 @@
         <el-input v-model.number="ruleForm.publisher_email"
                   style="width:300px;"></el-input>
       </el-form-item>
-      <el-form-item label="折扣率"
+      <el-form-item label="全局折扣率"
                     prop="discount_rate">
         <el-input v-model.number="ruleForm.discount_rate"
                   style="width:300px;"
                   type="number"></el-input>
       </el-form-item>
-      <el-form-item label="折旧率"
+      <el-form-item label="二手书折扣率"
                     prop="old_rate">
         <el-input v-model.number="ruleForm.old_rate"
+                  style="width:300px;"
+                  type="number"></el-input>
+      </el-form-item>
+      <el-form-item label="回收折扣率"
+                    prop="recycle_rate">
+        <el-input v-model.number="ruleForm.recycle_rate"
                   style="width:300px;"
                   type="number"></el-input>
       </el-form-item>
@@ -53,11 +59,15 @@ export default {
     submitForm (formName) {
       var _this = this
       if (_this.ruleForm.discount_rate >= 1) {
-        alert("折扣率不能超过1")
+        alert("全局折扣率不能超过1")
         location.reload();
       }
       else if (_this.ruleForm.old_rate >= 1) {
-        alert("折旧率不能超过1")
+        alert("二手书折扣率不能超过1")
+        location.reload();
+      }
+      else if (_this.ruleForm.recycle_rate <= 0) {
+        alert("回收折扣率不能低于0")
         location.reload();
       }
       else {

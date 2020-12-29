@@ -10,7 +10,7 @@ Vue.use(ElementUI);
 
 // 导入全局样式表
 import "./assets/css/global.css"
-
+let Base64 = require('js-base64').Base64
 //全局api
 import api from './assets/config/api.js'
 Vue.prototype.$api = api

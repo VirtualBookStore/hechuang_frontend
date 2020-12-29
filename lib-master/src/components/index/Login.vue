@@ -101,7 +101,6 @@ export default {
               var newToken = c.substring(name.length, c.length);
             }
           }
-          alert(newToken);
           window.sessionStorage.setItem('token', newToken);
 
           if (key === 'admin')

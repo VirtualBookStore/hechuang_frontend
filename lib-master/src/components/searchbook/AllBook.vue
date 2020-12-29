@@ -12,6 +12,23 @@
     <div class="tableMain">
       <el-table :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
                 style="width: 100%">
+
+        <el-table-column prop="cover"
+                         label="封面"
+                         :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <el-popover placement="top-start"
+                        title
+                        trigger="hover">
+              <img v-bind:src="'data:image/png;base64,'+scope.row.cover"
+                   alt
+                   style="width: 100%;height:100%" />
+              <img slot="reference"
+                   v-bind:src="'data:image/png;base64,'+scope.row.cover"
+                   style="width: 100%;height: 100%" />
+            </el-popover>
+          </template>
+        </el-table-column>
         <el-table-column prop="isbn"
                          label="isbn"
                          min-width="70%"></el-table-column>
@@ -133,7 +150,7 @@ export default {
     this.$http.get('/api/v1/book/')
       .then(function (res) {
         _this.tableData = res.data
-        console.log(_this.tableData)
+        console.log(res.data)
       })
       .catch(function (error) {
         console.log(error);
@@ -179,11 +196,12 @@ export default {
         this.$http.patch('/api/v1/book/' + this.form.isbn + '/', this.form)
           .then(function (res) {
             console.log(res.data);
+            location.reload();
           })
           .catch(function (error) {
             console.log(error);
           });
-        location.reload();
+
       }
       else {
         this.$http.post('/api/v1/book/', this.form)
