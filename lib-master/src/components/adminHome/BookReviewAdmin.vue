@@ -2,13 +2,7 @@
   <div class="basetable"
        v-loading="loading"
        element-loading-text="拼命加载中">
-    <!-- v-loading 设置加载 -->
-    <div class="selectMenu">
-      <!-- 点击触发add方法 -->
-      <el-button type="primary"
-                 @click="add"
-                 style="float:right">新增</el-button>
-    </div>
+
     <div class="tableMain">
       <el-table :data="tableData.filter(data => !search || data.order.user.username.toLowerCase().includes(search.toLowerCase()))"
                 style="width: 100%">
@@ -75,7 +69,11 @@ export default {
     var _this = this   //很重要！！
     this.$http.get('/api/v1/recycle/?read=false')
       .then(function (res) {
-        _this.tableData = res.data
+        for (let order in res.data) {
+          if (res.data[order].order.status === '申请回收中') {
+            _this.tableData.push(res.data[order])
+          }
+        }
         console.log(res.data)
       })
       .catch(function (error) {
