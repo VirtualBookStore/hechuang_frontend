@@ -1,62 +1,58 @@
 <template>
-  <div>
-    <el-row style="margin-top: 20px;">
-      <el-col :span="14" :offset="4">
-        <header class="form_header">申请回收书籍表</header>
-        <el-form
-          :model="returnForm"
-          :rules="returnrules"
-          ref="returnForm"
-          label-width="110px"
-          class="form return_form"
-        >
-          <el-form-item label="订单编号" prop="orderid">
-            <el-input v-model="returnForm.orderid"></el-input>
-          </el-form-item>
-          <el-form-item label="ISBN" prop="isbn">
-            <el-input v-model="returnForm.isbn"></el-input>
-          </el-form-item>
-          <el-form-item label="书名" prop="title">
-            <el-input v-model="returnForm.title"></el-input>
-          </el-form-item>
-          <el-form-item label="描述" prop="description">
-            <el-input v-model="returnForm.description"></el-input>
-          </el-form-item>
-          <el-form-item label="价格" prop="price">
-            <el-input v-model="returnForm.price"></el-input>
-          </el-form-item>
-          <el-form-item label="新书库存" prop="new_total">
-            <el-input v-model="returnForm.new_total"></el-input>
-          </el-form-item>
-          <el-form-item label="旧书库存" prop="old_total">
-            <el-input v-model="returnForm.old_total"></el-input>
-          </el-form-item>
-          <el-form-item label="是否被推荐" prop="recommended">
-            <el-input v-model="returnForm.recommended"></el-input>
-          </el-form-item>
-          <el-form-item label="标签" prop="tag">
-            <el-input v-model="returnForm.tag"></el-input>
-          </el-form-item>
+  <div class="book-info">
+    <el-table :data="orders" style="width: 100%" border :stripe="true">
+      <el-table-column prop="id" label="订单编号"></el-table-column>
+      <el-table-column prop="book.isbn" label="ISBN"></el-table-column>
+      <el-table-column prop="book.title" label="书名"></el-table-column>
+      <el-table-column prop="price" label="价格"></el-table-column>
+      <el-table-column prop="status" label="订单状态"></el-table-column>
+      <el-table-column
+        prop="time"
+        label="订单创建时间"
+        width="200px"
+      ></el-table-column>
+      <!-- <el-table-column
+        prop='old'
+        label="新书/旧书"
+      ></el-table-column> -->
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="small"
+            @click="
+              editData(scope.$index, scope.row)
+              checkStatus()
+            "
+            >回收</el-button
+          >
 
-          <!-- <el-form-item label="出版日期" prop="time_slot_id">
-            <el-date-picker
-              v-model="returnForm.time_slot_id"
-              align="right"
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="选择日期"
-              :picker-options="pickerOptions"
-            >
-            </el-date-picker>
-          </el-form-item> -->
-          <el-form-item>
-            <el-button type="primary" @click="returns('returnForm')"
-              >提交申请</el-button
-            >
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
+          <el-dialog
+            title="创建订单提示"
+            :visible.sync="RecycleDialogVisible"
+            width="30%"
+            center
+          >
+            <p>您确定要回收该订单中的书籍吗？</p>
+            <span>商品名称：{{ title }} 价格：{{ price }}</span>
+            <el-input placeholder="请输入回收原因" v-model="message" clearable>
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="RecycleDialogVisible = false"
+                >我再想想</el-button
+              >
+              <el-button
+                type="primary"
+                @click="
+                  RecycleDialogVisible = false
+                  submitForm()
+                "
+                >确认回收</el-button
+              >
+            </span>
+          </el-dialog>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -66,63 +62,67 @@ export default {
     return {
       RoomForm: JSON.parse(window.sessionStorage.getItem('rea')),
       pickerOptions: {},
-      returnForm: {
-        orderid: '',
-        isbn: '',
-        title: '',
-        description: '',
-        price: '',
-        new_total: '',
-        old_total: '',
-        recommended:'',
-        cover:'',
-        tag:'',
-      },
-      returnrules: {
-        // name: [{ required: true, message: '请输入书名', trigger: 'blur' }],
-        // pid: [{ required: true, message: '请输入书籍位置' }],
-      },
+      orders: [],
+      title: '',
+      price: 0,
+      message: '',
+      status: '',
+      form: {},
+      RecycleDialogVisible: false,
     }
   },
-  // created() {
-  //   this.roomshow()
-  // },
+
+  mounted: function() {
+    var _this = this //很重要！！
+    this.$http
+      .get('/api/v1/order/')
+      .then(function(res) {
+        console.log('orders:', res.data)
+        _this.orders = res.data
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+  },
   methods: {
-    // //异步操作
-    // tableRowStyle({ row, rowIndex }) {
-    //   return 'background-color:pink;font-size:10px;'
-    // },
-    // //设置表头行的样式
-    // tableHeaderColor({ row, column, rowIndex, columnIndex }) {
-    //   return 'background-color:#eef1f6;color:#313131;font-wight:500;font-size:15px;text-align:center'
-    // },
-    // tableRowClassName({ row, rowIndex }) {
-    //   if (rowIndex === 1) {
-    //     return 'warning-row'
-    //   } else if (rowIndex === 3) {
-    //     return 'success-row'
-    //   }
-    //   return ''
-    // },
-    // roomshow() {
-    //   let status = 200
-    //   let Token = window.sessionStorage.getItem('token')
-    //   this.$http
-    //     .get('/apip/api/recommendations', {
-    //       hearders: {
-    //         Authorization: Token,
-    //       },
-    //     })
-    //     .then(function(response) {
-    //       var data = JSON.stringify(response.data)
-    //       //    alert(data);
-    //       window.sessionStorage.setItem('rea', data)
-    //     })
-    //     .catch(function(response) {
-    //       console.log(response)
-    //     })
-    // },
-    // // alert(window.sessionStorage.getItem('dat').data.);
+    bookTypeFormate(row) {
+      if (row.old) {
+        return '旧书'
+      } else return '新书'
+    },
+    editData(index, row) {
+      console.log('index:' + index)
+      this.form = this.orders[index]
+      console.log(this.form)
+      this.title = this.form['book'].title
+      this.price = this.form['book'].price
+      this.status = this.form['status']
+      console.log(this.status)
+    },
+    checkStatus() {
+      if (this.status === '已完成') {
+        this.RecycleDialogVisible = true
+      } else {
+        this.$message({
+          showClose: true,
+          message: '订单状态不为已完成，无法进行回收！',
+          type: 'error',
+        })
+      }
+    },
+    submitForm() {
+      this.$http
+        .post(
+          '/api/v1/order/' + this.form.id + '/recycle/',
+          this.message
+        )
+        .then((res) => {
+          console.log(res.data)
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
   },
 }
 </script>
