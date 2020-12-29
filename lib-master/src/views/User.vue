@@ -11,7 +11,7 @@
       <!--            </div>-->
       <div class="out-button">
         <!-- //todo:登出按钮功能还未实现 -->
-        <el-button size="medium" round> 退出</el-button>
+        <el-button size="medium" round @click="logout()"> 退出</el-button>
       </div>
     </el-header>
     <!--        页面主体-->
@@ -28,14 +28,14 @@
           <el-submenu index="2">
             <template slot="title"><p class="sub-title">书店商城</p></template>
             <el-menu-item index="/AllBook1">浏览全部书籍</el-menu-item>
-            <el-menu-item index="/BookRecycle">申请回收书籍</el-menu-item>
+            <el-menu-item index="/BookRecycle">交易历史</el-menu-item>
             <el-menu-item index="/SearchBox1">搜索书籍</el-menu-item>
-            <!-- <el-menu-item index="/BookBorrows">填写  </el-menu-item> -->
-            <!-- <el-menu-item index="/s">浏览借阅记录</el-menu-item> -->
-            <!-- <el-menu-item index="/BookExborrow">续借书籍</el-menu-item> -->
-            <!-- <el-menu-item index="/BookReserve">书籍预约</el-menu-item> -->
+            <el-menu-item index="/ComfirmReceive">确认收货</el-menu-item>
           </el-submenu>
-
+          <el-submenu index="3">
+            <template slot="title"><p class="sub-title">通知</p></template>
+            <el-menu-item index="/notification">查看通知</el-menu-item>
+          </el-submenu>
         </el-menu>
       </el-aside>
       <!--            右侧内容主体-->
@@ -60,7 +60,20 @@ export default {
     // this.warnings()
     // this.bookcategory()
   },
-  methods: {},
+  methods: {
+    logout() {
+      {
+        var _this = this
+        this.$http
+          .post('/api/v1/auth/logout/')
+          .then(function(res) {
+            _this.$router.push('index')
+            window.sessionStorage.clear()
+          })
+          .catch(function(error) {})
+      }
+    },
+  },
 }
 </script>
 

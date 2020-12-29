@@ -71,8 +71,8 @@
                   type="primary"
                   @click="
                     OrderDialogVisible = false
-                    purchase()
                     old = false
+                    purchase()
                   "
                   >购买新书</el-button
                 >
@@ -212,11 +212,9 @@ export default {
 
     purchase() {
       this.$http
-        .post(
-          '/api/v1/book/' + this.form.isbn + '/purchase/',
-          this.form,
-          this.old
-        )
+        .post('/api/v1/book/' + this.form.isbn + '/purchase/', {
+          old: this.old,
+        })
         .then((res) => {
           console.log(res.data)
           console.log(this.old)
@@ -233,6 +231,7 @@ export default {
         .patch('/api/v1/order/' + this.orderId + '/pay/', this.form)
         .then(function(res) {
           console.log(res.data)
+          location.reload();
         })
         .catch(function(error) {
           console.log(error)

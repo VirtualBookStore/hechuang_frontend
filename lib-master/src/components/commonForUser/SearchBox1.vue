@@ -3,41 +3,35 @@
     <div>
       <p class="cur-p">查询图书</p>
     </div>
-    <el-form
-      ref="bookFormRef"
-      :model="bookForm"
-      :rules="bookFormRules"
-      class="demo-now_Data"
-    >
-      <!-- //todo:此处需要的参数是一个ISBN号 -->
+    <el-form ref="bookFormRef" class="demo-now_Data">
       <el-form-item prop="book_name">
         <el-input
-          v-model="bookForm.book_name"
+          v-model="isbn"
           placeholder="输入需要查询书籍的ISBN"
         ></el-input>
       </el-form-item>
     </el-form>
-    <el-button type="primary" @click="search" class="submit_btn "
+    <el-button
+      type="primary"
+      @click="
+        search()
+        searchdialogvisible = true
+      "
+      class="submit_btn "
       >查询</el-button
     >
-    <!-- //todo：这里需要在props或data中建立相应的参数 -->
+
     <el-dialog title="书名搜索" :visible.sync="searchdialogvisible" width="70%">
-      <el-table :data="searchlist" style="width: 100%" border :stripe="true">
+      <el-table :data="bookInfo" style="width: 100%" border :stripe="true">
         <el-table-column
-          prop="book_name"
+          prop="title"
           label="书名"
           width="120"
         ></el-table-column>
-        <el-table-column prop="id" label="简介"></el-table-column>
-        <el-table-column prop="place_id" label="价格"></el-table-column>
-        <el-table-column
-          prop="publishing_house"
-          label="新书数量"
-        ></el-table-column>
-        <el-table-column
-          prop="publication_date"
-          label="旧书数量"
-        ></el-table-column>
+        <el-table-column prop="description" label="简介"></el-table-column>
+        <el-table-column prop="price" label="价格"></el-table-column>
+        <el-table-column prop="new_total" label="新书数量"></el-table-column>
+        <el-table-column prop="old_total" label="旧书数量"></el-table-column>
       </el-table>
       <!-- 底部按钮区域 -->
       <div class="button-down">
@@ -53,15 +47,19 @@ export default {
     return {
       searchlist: [],
       searchdialogvisible: false,
+      bookInfo: {},
       //图书表单数据绑定
-      bookForm: {
-        book_name: '',
-      },
+      isbn: '',
+      title: '',
+      description: '',
+      price: 0,
+      new_total: 0,
+      old_total: 0,
       //表单的验证规则
       bookFormRules: {
         //    验证书名是否合法
         book_name: [
-          { required: true, message: '请输入书籍名称', trigger: 'blur' },
+          { required: true, message: '请输入书籍ISBN', trigger: 'blur' },
         ],
       },
     }
@@ -69,31 +67,17 @@ export default {
   methods: {
     //异步操作
     search() {
-      this.$refs.bookFormRef.validate(async (valid) => {
-        if (!valid) return
-        let msg = ''
-        let status = 200
-        let key = this.bookForm.book_name
-        let Token = window.sessionStorage.getItem('token') //this.$message.info("The database isn't ready.");
-        let result = await this.$http
-          .get('/apip/api/booksarch?name=' + this.bookForm.book_name, {
-            hearders: {
-              Authorization: Token,
-            },
-          })
-          .catch(function(error) {
-            if (error.response) {
-              status = error.response.status
-              msg = error.response.data.msg
-            }
-          })
-        this.searchlist = result.data
-        if (status === 400) {
-          this.$message.info('该书不存在 !')
-        }
-      })
-
-      this.searchdialogvisible = true
+      this.$http
+        .get('/api/v1/book/' + this.isbn)
+        .then((res) => {
+          console.log(res.data)
+          this.bookInfo = res.data
+          console.log("bookinfo:",bookInfo)
+          this.searchdialogvisible = true
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
     },
   },
 }

@@ -1,5 +1,11 @@
 <template>
   <div class="book-info">
+        <div class="selectMenu">
+      <!-- 点击触发add方法 -->
+      <el-button type="primary"
+                 @click="add"
+                 style="float:right">新增</el-button>
+    </div>
     <el-table :data="orders" style="width: 100%" border :stripe="true">
       <el-table-column prop="id" label="订单编号"></el-table-column>
       <el-table-column prop="book.isbn" label="ISBN"></el-table-column>
@@ -118,6 +124,7 @@ export default {
         )
         .then((res) => {
           console.log(res.data)
+          location.reload();
         })
         .catch(function(error) {
           console.log(error)
