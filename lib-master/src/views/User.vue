@@ -34,17 +34,8 @@
             <!-- <el-menu-item index="/s">浏览借阅记录</el-menu-item> -->
             <!-- <el-menu-item index="/BookExborrow">续借书籍</el-menu-item> -->
             <!-- <el-menu-item index="/BookReserve">书籍预约</el-menu-item> -->
-            <el-menu-item index="/BookReviewUser"
-              >用户推荐书籍查询</el-menu-item
-            >
           </el-submenu>
-          <el-submenu index="3">
-            <template slot="title"
-              ><p class="sub-title">自习室管理</p></template
-            >
-            <el-menu-item index="/RoomList1">浏览自习室列表</el-menu-item>
-            <el-menu-item index="/RoomReserve">预约自习室</el-menu-item>
-          </el-submenu>
+
         </el-menu>
       </el-aside>
       <!--            右侧内容主体-->
