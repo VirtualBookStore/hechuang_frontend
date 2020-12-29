@@ -3,31 +3,36 @@
        v-loading="loading"
        element-loading-text="拼命加载中">
     <!-- v-loading 设置加载 -->
+    <div class="selectMenu">
+      <!-- 点击触发add方法 -->
+      <el-button type="primary"
+                 @click="add"
+                 style="float:right">新增</el-button>
+    </div>
     <div class="tableMain">
-      <el-table :data="tableData"
+      <el-table :data="tableData.filter(data => !search || data.order.user.username.toLowerCase().includes(search.toLowerCase()))"
                 style="width: 100%">
-        <el-table-column prop="isbn"
-                         label="isbn"
+        <el-table-column prop="order.id"
+                         label="订单编号"
                          min-width="70%"></el-table-column>
-        <el-table-column prop="title"
+        <el-table-column prop="order.book.title"
                          label="书名"
                          min-width="70%"></el-table-column>
-        <el-table-column prop="description"
-                         label="描述"
+        <el-table-column prop="order.status"
+                         label="订单状态"
                          min-width="90%"></el-table-column>
         <el-table-column prop="price"
-                         label="价格"
-                         min-width="40%"></el-table-column>
-        <el-table-column prop="new_total"
-                         label="新书库存"
+                         label="订单金额"
+                         min-width="70%"></el-table-column>
+        <el-table-column prop="number"
+                         label="数量"
                          min-width="50%"></el-table-column>
-        <el-table-column prop="old_total"
-                         label="旧书库存"
-                         min-width="50%"></el-table-column>
-        <el-table-column prop="recommended"
-                         label="是否被推荐"
-                         :formatter="recommendedFormat"
-                         min-width="60%"></el-table-column>
+        <el-table-column prop="order.user.username"
+                         label="申请用户"
+                         min-width="70%"></el-table-column>
+        <el-table-column prop="message"
+                         label="申请信息"
+                         min-width="70%"></el-table-column>
         <el-table-column label="操作">
           <template slot="header"
                     slot-scope="scope">
@@ -37,9 +42,11 @@
           </template>
           <template slot-scope="scope">
             <el-button size="small"
-                       @click="agree">同意</el-button>
+                       @click="disagree(scope.$index)">拒绝
+            </el-button>
             <el-button size="small"
-                       @click="disagree">拒绝</el-button>
+                       @click="agree(scope.$index)">同意
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -48,7 +55,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-var ad = 1;
 export default {
   data () {
     return {
@@ -62,14 +68,15 @@ export default {
       value6: "",
       currentPage3: 1,
       currentIndex: "",
+      search: ''
     };
   },
   mounted: function () {
     var _this = this   //很重要！！
-    this.$http.get('/api/v1/book/')
+    this.$http.get('/api/v1/recycle/?read=false')
       .then(function (res) {
-        console.log(res.data);
         _this.tableData = res.data
+        console.log(res.data)
       })
       .catch(function (error) {
         console.log(error);
@@ -93,39 +100,36 @@ export default {
         }
       });
     },
-    recommendedFormat (row, column) {
-      if (row.recommended === false) {
-        return '未在推荐'
-      } else {
-        return '正在推荐'
-      }
+
+    // 增加数据的方式，单独的设置一些值，用于增加功能，这些值放在对象里面进行设置，然后将这个新增的对象塞到总数据里面
+    add () {
     },
-    update () {
-      this.$http.patch('/api/v1/book/' + this.form.isbn + '/', this.form)
+    agree (index) {
+      var _this = this;
+      alert("123");
+      this.$http.patch('/api/v1/order/' + _this.tableData[index].order.id + '/recycle/check/',
+        {
+          allowed: "true"
+        })
         .then(function (res) {
           console.log(res.data);
         })
         .catch(function (error) {
           console.log(error);
         });
-      location.reload();
     },
-    handleEdit (index, row) {
-      // 将数据的index传递过来用于实现数据的回显
-      this.form = this.tableData[index];
-      this.currentIndex = index;
-      // 设置对话框的可见
-      this.dialogFormVisible = true;
-    },
-    cancel () {
-      // 取消的时候直接设置对话框不可见即可
-      this.dialogFormVisible = false;
-    },
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange (val) {
-      console.log(`当前页: ${val}`);
+    disagree (index) {
+      var _this = this;
+      this.$http.patch('/api/v1/order/' + _this.tableData[index].order.id + '/recycle/check/',
+        {
+          allowed: "false"
+        })
+        .then(function (res) {
+          console.log(res.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   }
 };

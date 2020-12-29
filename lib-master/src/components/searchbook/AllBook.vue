@@ -23,7 +23,7 @@
                          min-width="90%"></el-table-column>
         <el-table-column prop="price"
                          label="价格"
-                         min-width="40%"></el-table-column>
+                         min-width="60%"></el-table-column>
         <el-table-column prop="new_total"
                          label="新书库存"
                          min-width="50%"></el-table-column>
@@ -134,7 +134,6 @@ export default {
       .then(function (res) {
         _this.tableData = res.data
         console.log(_this.tableData)
-        console.log(this.tableData)
       })
       .catch(function (error) {
         console.log(error);

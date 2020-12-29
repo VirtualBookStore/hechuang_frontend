@@ -19,7 +19,7 @@ import AdminInfo from '../components/adminHome/AdminInfo'
 import AdminRegister from '../components/adminHome/AdminRegister'
 import BookReviewAdmin from '../components/adminHome/BookReviewAdmin'
 import adminlist from '../components/adminHome/adminlist'
-import readerlist from '../components/adminHome/readerlist'
+import inf from '../components/adminHome/inf'
 import search from '../components/adminHome/search'
 import s from '../components/adminHome/s'
 //book页面和他的组件
@@ -85,7 +85,7 @@ const routes = [
       { path: '/BookSearchUser', component: BookSearchUser },
       { path: '/RoomList', component: RoomList },
       { path: '/adminlist', component: adminlist },
-      { path: '/readerlist', component: readerlist },
+      { path: '/inf', component: inf },
       { path: '/search', component: search },
     ],
   },
