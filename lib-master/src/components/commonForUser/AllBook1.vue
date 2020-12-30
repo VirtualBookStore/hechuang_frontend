@@ -48,7 +48,6 @@
             <el-button
               size="small"
               @click="editData(scope.$index, scope.row)"
-              v-if="!isSure"
               >购买</el-button
             >
             <el-dialog
@@ -63,7 +62,6 @@
                 <el-button
                   @click="
                     OrderDialogVisible = false
-                    isSure = false
                   "
                   >取 消</el-button
                 >
@@ -94,7 +92,7 @@
               center
             >
               <p>您确定要购买该商品吗？确定后您将为其付款</p>
-              <span>商品名称：{{ title }} 价格：{{ price }}</span>
+              <span>商品名称：{{ title }} 价格：{{ price*(1-discount) }}</span>
               <span slot="footer" class="dialog-footer">
                 <el-button
                   @click="
@@ -134,7 +132,6 @@
 export default {
   data() {
     return {
-      isSure: false,
       isbn: [],
       loading: true,
       tableData: [],
@@ -143,6 +140,7 @@ export default {
       price: 0,
       form: {},
       orderId: '',
+      discount: 0,
       old: false,
       searchlist: [],
       searchdialogvisible: true,
@@ -165,6 +163,8 @@ export default {
   },
   mounted: function() {
     var _this = this //很重要！！
+    this.discount = window.sessionStorage.getItem('discount_rate')
+    console.log("discount:",this.discount)
     this.$http
       .get('/api/v1/book/')
       .then(function(res) {

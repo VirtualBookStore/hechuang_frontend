@@ -33,7 +33,7 @@
             center
           >
             <p>您确定要回收该订单中的书籍吗？</p>
-            <span>商品名称：{{ title }} 价格：{{ price }}</span>
+            <span>商品名称：{{ title }} 回收价格：{{ price*recycle_rate }}</span>
             <el-input placeholder="请输入回收原因" v-model="message" clearable>
             </el-input>
             <span slot="footer" class="dialog-footer">
@@ -65,6 +65,7 @@ export default {
       orders: [],
       title: '',
       price: 0,
+      recycle_rate:0,
       message: '',
       status: '',
       form: {},
@@ -74,6 +75,7 @@ export default {
 
   mounted: function() {
     var _this = this //很重要！！
+    this.recycle_rate = window.sessionStorage.getItem('recycle_rate')
     this.$http
       .get('/api/v1/order/')
       .then(function(res) {
@@ -95,7 +97,7 @@ export default {
       this.form = this.orders[index]
       console.log(this.form)
       this.title = this.form['book'].title
-      this.price = this.form['book'].price
+      this.price = this.form.price
       this.status = this.form['status']
       console.log(this.status)
     },
