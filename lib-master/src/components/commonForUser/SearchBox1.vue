@@ -3,8 +3,8 @@
     <div>
       <p class="cur-p">查询图书</p>
     </div>
-    <el-form ref="bookFormRef" class="demo-now_Data">
-      <el-form-item prop="book_name">
+    <el-form class="demo-now_Data">
+      <el-form-item>
         <el-input
           v-model="isbn"
           placeholder="输入需要查询书籍的ISBN"
@@ -47,7 +47,7 @@ export default {
     return {
       searchlist: [],
       searchdialogvisible: false,
-      bookInfo: {},
+      bookInfo: [],
       //图书表单数据绑定
       isbn: '',
       title: '',
@@ -71,9 +71,13 @@ export default {
         .get('/api/v1/book/' + this.isbn)
         .then((res) => {
           console.log(res.data)
-          this.bookInfo = res.data
-          console.log("bookinfo:",bookInfo)
-          this.searchdialogvisible = true
+          if (this.isbn != '') {
+            this.bookInfo = [res.data]
+          } else {
+            this.bookInfo = res.data
+          }
+          // this.bookInfo = res.data
+          console.log('bookinfo:', this.bookInfo)
         })
         .catch(function(error) {
           console.log(error)
