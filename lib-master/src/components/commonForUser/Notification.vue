@@ -2,23 +2,30 @@
   <div>
     <div class="selectMenu">
       <!-- 点击触发add方法 -->
-      <el-button type="primary" @click="readAll" style="float:right"
-        >一键已读</el-button
-      >
+      <el-button type="primary"
+                 @click="readAll"
+                 style="float:right">一键已读</el-button>
     </div>
-    <el-table :data="notifications" style="width: 100%" border :stripe="true">
-      <el-table-column prop="id" label="通知编号"></el-table-column>
-      <el-table-column prop="actor.id" label="订单编号"></el-table-column>
-      <el-table-column prop="actor.book.title" label="书名"></el-table-column>
-      <el-table-column prop="actor.status" label="订单状态"></el-table-column>
-      <el-table-column prop="verb" label="通知"></el-table-column>
-      <el-table-column prop="timestamp" label="通知时间"></el-table-column>
+    <el-table :data="notifications"
+              style="width: 100%"
+              border
+              :stripe="true">
+      <el-table-column prop="id"
+                       label="通知编号"></el-table-column>
+      <el-table-column prop="actor.id"
+                       label="订单编号"></el-table-column>
+      <el-table-column prop="actor.book.title"
+                       label="书名"></el-table-column>
+      <el-table-column prop="actor.status"
+                       label="订单状态"></el-table-column>
+      <el-table-column prop="verb"
+                       label="通知"></el-table-column>
+      <el-table-column prop="timestamp"
+                       label="通知时间"></el-table-column>
 
       <el-table-column>
         <template slot-scope="scope">
-          <el-button size="small" 
-            >阅读</el-button
-          >
+          <el-button size="small">阅读</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -27,7 +34,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       RoomForm: JSON.parse(window.sessionStorage.getItem('rea')),
       pickerOptions: {},
@@ -43,31 +50,31 @@ export default {
     }
   },
 
-  mounted: function() {
+  mounted: function () {
     var _this = this //很重要！！
     this.$http
       .get('/api/v1/notification/')
-      .then(function(res) {
+      .then(function (res) {
         console.log('orders:', res.data)
         _this.notifications = res.data
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error)
       })
   },
   methods: {
-    readAll() {
+    readAll () {
       this.$http
         .patch('/api/v1/notification/mark-all-read/')
         .then((res) => {
           console.log(res.data)
           location.reload()
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
     },
-    editData(index, row) {
+    editData (index, row) {
       console.log('index:' + index)
       this.form = this.orders[index]
       console.log(this.form)
@@ -76,7 +83,7 @@ export default {
       this.status = this.form['status']
       console.log(this.status)
     },
-    checkStatus() {
+    checkStatus () {
       if (this.status === '已完成') {
         this.RecycleDialogVisible = true
       } else {
@@ -87,14 +94,14 @@ export default {
         })
       }
     },
-    submitForm() {
+    submitForm () {
       this.$http
         .post('/api/v1/order/' + this.form.id + '/recycle/', this.message)
         .then((res) => {
           console.log(res.data)
           location.reload()
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
     },
