@@ -29,7 +29,7 @@
           width="120"
         ></el-table-column>
         <el-table-column prop="description" label="简介"></el-table-column>
-        <el-table-column prop="price" label="价格"></el-table-column>
+        <el-table-column prop="price" label="价格(元)"></el-table-column>
         <el-table-column prop="new_total" label="新书数量"></el-table-column>
         <el-table-column prop="old_total" label="旧书数量"></el-table-column>
       </el-table>
@@ -72,8 +72,12 @@ export default {
         .then((res) => {
           console.log(res.data)
           if (this.isbn != '') {
+            res.data.price/=100
             this.bookInfo = [res.data]
           } else {
+            for (let item in res.data) {
+              res.data[item].price /= 100
+            }
             this.bookInfo = res.data
           }
           // this.bookInfo = res.data

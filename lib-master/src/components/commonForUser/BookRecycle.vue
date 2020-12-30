@@ -4,7 +4,7 @@
       <el-table-column prop="id" label="订单编号"></el-table-column>
       <el-table-column prop="book.isbn" label="ISBN"></el-table-column>
       <el-table-column prop="book.title" label="书名"></el-table-column>
-      <el-table-column prop="price" label="价格"></el-table-column>
+      <el-table-column prop="price" label="价格(元)"></el-table-column>
       <el-table-column prop="status" label="订单状态"></el-table-column>
       <el-table-column
         prop="time"
@@ -33,7 +33,7 @@
             center
           >
             <p>您确定要回收该订单中的书籍吗？</p>
-            <span>商品名称：{{ title }} 回收价格：{{ price*recycle_rate }}</span>
+            <span>商品名称：{{ title }} 回收价格：{{ price*(1-recycle_rate) }}</span>
             <el-input placeholder="请输入回收原因" v-model="message" clearable>
             </el-input>
             <span slot="footer" class="dialog-footer">
@@ -80,6 +80,9 @@ export default {
       .get('/api/v1/order/')
       .then(function(res) {
         console.log('orders:', res.data)
+        for(let item in res.data){
+          res.data[item].price/=100
+        }
         _this.orders = res.data
       })
       .catch(function(error) {

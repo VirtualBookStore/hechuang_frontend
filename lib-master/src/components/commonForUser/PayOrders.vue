@@ -21,7 +21,7 @@
             size="small"
             @click="
               editData(scope.$index, scope.row)
-              PayDialogVisible=true
+              PayDialogVisible = true
             "
             >支付</el-button
           >
@@ -35,14 +35,13 @@
             <p>您要确定付款吗？</p>
             <span>商品名称：{{ title }} 价格：{{ price }}</span>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="PayDialogVisible = false"
-                >取消</el-button
-              >
+              <el-button @click="PayDialogVisible = false">取消</el-button>
               <el-button
                 type="primary"
                 @click="
                   PayDialogVisible = false
                   payOrder()
+                  paySuccess()
                 "
                 >确认付款</el-button
               >
@@ -78,6 +77,7 @@ export default {
         console.log('orders:', res.data)
         for (let order in res.data) {
           console.log(res.data[order])
+          res.data[order].price /= 100
           if (res.data[order].status === '待支付') {
             // console.log(order)
             _this.orders.push(res.data[order])
@@ -89,6 +89,12 @@ export default {
       })
   },
   methods: {
+    paySuccess() {
+      this.$message({
+        message: '购买成功，谢谢您的支持！',
+        type: 'success',
+      })
+    },
     editData(index, row) {
       console.log('index:' + index)
       this.form = this.orders[index]
@@ -104,7 +110,7 @@ export default {
         .patch('/api/v1/order/' + this.form.id + '/pay/')
         .then((res) => {
           console.log(res.data)
-          location.reload();
+          location.reload()
         })
         .catch(function(error) {
           console.log(error)
