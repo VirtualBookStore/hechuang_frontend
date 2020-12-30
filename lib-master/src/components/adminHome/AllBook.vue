@@ -95,7 +95,7 @@
           <el-input v-model="form.description"
                     auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="价格"
+        <el-form-item label="价格￥"
                       :label-width="formLabelWidth">
           <el-input v-model="form.price"
                     auto-complete="off"></el-input>
@@ -149,6 +149,9 @@ export default {
     var _this = this   //很重要！！
     this.$http.get('/api/v1/book/')
       .then(function (res) {
+        for(let item in res.data){
+          res.data[item].price/=100
+        }
         _this.tableData = res.data
         console.log(res.data)
       })

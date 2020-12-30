@@ -33,7 +33,7 @@
             center
           >
             <p>您确定要回收该订单中的书籍吗？</p>
-            <span>商品名称：{{ title }} 回收价格：{{ price*(1-recycle_rate) }}</span>
+            <span>商品名称：{{ title }} 回收价格：{{ price*(1-recycle_rate).toFixed(1) }}</span>
             <el-input placeholder="请输入回收原因" v-model="message" clearable>
             </el-input>
             <span slot="footer" class="dialog-footer">

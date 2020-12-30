@@ -82,6 +82,10 @@ export default {
     var _this = this   //很重要！！
     this.$http.get('/api/v1/order/')
       .then(function (res) {
+        console.log("data:",res.data)
+        for(let item in res.data){
+          res.data[item].price/=100
+        }
         _this.tableData = res.data
       })
       .catch(function (error) {
@@ -106,7 +110,7 @@ export default {
       });
     },
     oldFormat (row, column) {
-      if (row.recommended === false) {
+      if (row.old === false) {
         return '二手书'
       } else {
         return '新书'

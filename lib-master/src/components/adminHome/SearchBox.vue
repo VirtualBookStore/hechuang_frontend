@@ -68,11 +68,12 @@ export default {
       .then(function (res) {
         /*        _this.tableData = res.data */
         for (let order in res.data) {
+          res.data[order].price/=100
           if (res.data[order].order.status === '回收中') {
             _this.tableData.push(res.data[order])
           }
         }
-        console.log(res.data)
+        console.log(res.data[0].order.user)
       })
       .catch(function (error) {
         console.log(error);
