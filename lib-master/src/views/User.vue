@@ -114,7 +114,7 @@ export default {
   height: 100%;
 }
 .main-content {
-  width: 70%;
+  width: 80%;
   margin: auto;
 }
 .el-menu {
@@ -128,7 +128,7 @@ export default {
   justify-content: space-between;
   margin-left: 0;
   padding-left: 0;
-  width: 70%;
+  width: 80%;
   margin: auto;
   border-bottom: 1px solid #e7e7e7;
 }
