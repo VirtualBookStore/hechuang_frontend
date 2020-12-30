@@ -4,29 +4,38 @@
     <!--        头部区域-->
     <el-header class="elheader">
       <div>
-        <img src="../assets/img/bookstoreIcon.png" height="59" />
+        <img src="../assets/img/bookstoreIcon.png"
+             height="59" />
       </div>
       <!--            <div class="header-name">-->
       <!--                {{username}}-->
       <!--            </div>-->
       <div class="out-button">
         <!-- //todo:登出按钮功能还未实现 -->
-        <el-button size="medium" round @click="logout()"> 退出</el-button>
+        <el-button size="medium"
+                   round
+                   @click="logout()"> 退出</el-button>
       </div>
     </el-header>
     <!--        页面主体-->
     <el-container class="main-content">
       <!--            侧边栏-->
       <el-aside width="150px">
-        <el-menu router text-color="#444" active-text-color="#409eff">
+        <el-menu router
+                 text-color="#444"
+                 active-text-color="#409eff">
           <el-submenu index="1">
-            <template slot="title"><p class="sub-title">信息管理</p></template>
+            <template slot="title">
+              <p class="sub-title">信息管理</p>
+            </template>
             <el-menu-item index="/information">查看个人信息</el-menu-item>
             <el-menu-item index="/AdminChangeIf1">修改个人信息</el-menu-item>
             <el-menu-item index="/AdminChangePass1">修改密码</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template slot="title"><p class="sub-title">书店商城</p></template>
+            <template slot="title">
+              <p class="sub-title">书店商城</p>
+            </template>
             <el-menu-item index="/AllBook1">浏览全部书籍</el-menu-item>
             <el-menu-item index="/BookRecycle">交易历史</el-menu-item>
             <el-menu-item index="/SearchBox1">搜索书籍</el-menu-item>
@@ -35,7 +44,9 @@
 
           </el-submenu>
           <el-submenu index="3">
-            <template slot="title"><p class="sub-title">通知</p></template>
+            <template slot="title">
+              <p class="sub-title">通知</p>
+            </template>
             <el-menu-item index="/notification">查看通知</el-menu-item>
           </el-submenu>
         </el-menu>
@@ -50,7 +61,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       username: window.sessionStorage.getItem('token'),
       booklist: {
@@ -58,21 +69,39 @@ export default {
       },
     }
   },
-  mounted: function() {
-    // this.warnings()
-    // this.bookcategory()
+  mounted: function () {
+    {
+      var _this = this;
+      var discount_rate = 0;
+      var old_rate = 0;
+      var recycle_rate = 0;
+      this.$http
+        .get('/api/v1/config/')
+        .then(function (res) {
+          discount_rate = res.data.discount_rate;
+          old_rate = res.data.old_rate;
+          recycle_rate = res.data.recycle_rate;
+          console.log(discount_rate);
+          console.log(old_rate);
+          console.log(recycle_rate);
+          window.sessionStorage.setItem('discount_rate', discount_rate);
+          window.sessionStorage.setItem('old_rate', old_rate);
+          window.sessionStorage.setItem('recycle_rate', recycle_rate);
+        })
+        .catch(function (error) { })
+    }
   },
   methods: {
-    logout() {
+    logout () {
       {
         var _this = this
         this.$http
           .post('/api/v1/auth/logout/')
-          .then(function(res) {
+          .then(function (res) {
             _this.$router.push('index')
             window.sessionStorage.clear()
           })
-          .catch(function(error) {})
+          .catch(function (error) { })
       }
     },
   },
