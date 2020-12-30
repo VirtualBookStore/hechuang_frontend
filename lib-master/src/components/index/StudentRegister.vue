@@ -9,40 +9,39 @@
       </h1>
       <p>成为合创书店会员，享受书店的所有权益！</p>
     </div>
-    <section class="formCon" v-show="1">
+    <section class="formCon"
+             v-show="1">
       <!-- <div class="h1">
         <p>SIGN UP</p>
       </div> -->
-      <el-form
-        ref="registerFormRef"
-        :model="registerForm"
-        :rules="registerFormRules"
-        label-width="100px"
-      >
-        <el-form-item prop="username" label="用户ID">
-          <el-input
-            v-model="registerForm.username"
-            placeholder="用户ID"
-          ></el-input>
+      <el-form ref="registerFormRef"
+               :model="registerForm"
+               :rules="registerFormRules"
+               label-width="100px">
+        <el-form-item prop="username"
+                      label="用户ID">
+          <el-input v-model="registerForm.username"
+                    placeholder="用户ID"></el-input>
         </el-form-item>
-        <el-form-item prop="tel" label="邮箱">
-          <el-input v-model="registerForm.tel" placeholder="邮箱"></el-input>
+        <el-form-item prop="tel"
+                      label="邮箱">
+          <el-input v-model="registerForm.tel"
+                    placeholder="邮箱"></el-input>
         </el-form-item>
-        <el-form-item prop="password" label="密码">
-          <el-input
-            type="password"
-            v-model="registerForm.password"
-            placeholder="密码"
-          ></el-input>
+        <el-form-item prop="password"
+                      label="密码">
+          <el-input type="password"
+                    v-model="registerForm.password"
+                    placeholder="密码"></el-input>
         </el-form-item>
-        <el-form-item prop="confirmPassword" label="确认密码">
-          <el-input
-            type="password"
-            v-model="registerForm.confirmPassword"
-            placeholder="确认密码"
-          ></el-input>
+        <el-form-item prop="confirmPassword"
+                      label="确认密码">
+          <el-input type="password"
+                    v-model="registerForm.confirmPassword"
+                    placeholder="确认密码"></el-input>
         </el-form-item>
-        <el-button type="primary" @click="register">注册</el-button>
+        <el-button type="primary"
+                   @click="register">注册</el-button>
         <!-- <a>Already Have One?</a> -->
       </el-form>
     </section>
@@ -51,7 +50,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     let checkPassword = (rule, value, cb) => {
       const regPassword = /^\w{6,15}$/
       if (true) {
@@ -64,7 +63,6 @@ export default {
     return {
       //登录表单数据绑定
       registerForm: {
-        name: '',
         username: '',
         tel: '',
         password: '',
@@ -79,13 +77,19 @@ export default {
             min: 3,
             max: 10,
             message: '用户名必须在3-10个字符之间',
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ],
         //    验证密码是否合法
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { validator: checkPassword, trigger: 'blur' },
+          { validator: checkPassword, trigger: 'blur' }
+        ],
+        tel: [
+          { required: true, message: '请输入邮箱 ', trigger: 'blur' }
+        ],
+        confirmPassword: [
+          { required: true, message: '请输入密码 ', trigger: 'blur' }
         ],
       },
     }
@@ -93,7 +97,7 @@ export default {
   methods: {
     //异步操作
     //根据status判断是否注册成功,成功跳转页面,失败显示msg在合适的地方
-    register() {
+    register () {
       this.$refs.registerFormRef.validate(async (valid) => {
         if (!valid) return
         let msg1 = ''
@@ -107,7 +111,7 @@ export default {
             password1: this.registerForm.password,
             password2: this.registerForm.confirmPassword,
           })
-          .catch(function(error) {
+          .catch(function (error) {
             if (error.response) {
               status = error.response.status
               msg1 = error.response.data.username
@@ -122,8 +126,8 @@ export default {
           alert('注册成功')
           this.$router.push(
             { path: '/login' },
-            (onComplete) => {},
-            (onAbort) => {}
+            (onComplete) => { },
+            (onAbort) => { }
           )
         }
       })
@@ -184,7 +188,7 @@ export default {
   font-weight: bold;
   color: #fff;
   font-size: 40px;
-  font-family: 'Microsoft Yahei', sans-serif;
+  font-family: "Microsoft Yahei", sans-serif;
 }
 .submit_btn {
   width: 100%;
