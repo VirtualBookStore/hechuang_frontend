@@ -35,6 +35,7 @@ import BookSearchUser from '../components/booking/BookSearchUser'
 import BookRegister from '../components/booking/BookRegister'
 import ComfirmReceive from '../components/commonForUser/ComfirmReceive'
 import Notification from '../components/commonForUser/Notification'
+import PayOrders from '../components/commonForUser/PayOrders'
 //searchbook页面和他的组件
 import SearchBox from '../components/searchbook/SearchBox'
 import AllBook from '../components/searchbook/AllBook'
@@ -113,6 +114,7 @@ const routes = [
       { path: '/BookReviewUser', component: BookReviewUser },
       { path: '/ComfirmReceive', component: ComfirmReceive },
       { path: '/Notification', component: Notification },
+      { path: '/PayOrders', component: PayOrders },
       { path: '/s', component: s },
     ],
   },

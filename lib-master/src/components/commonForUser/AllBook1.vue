@@ -228,7 +228,7 @@ export default {
     },
     pay() {
       this.$http
-        .patch('/api/v1/order/' + this.orderId + '/pay/', this.form)
+        .patch('/api/v1/order/' + this.orderId + '/pay/')
         .then(function(res) {
           console.log(res.data)
           location.reload();
