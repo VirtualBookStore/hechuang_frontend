@@ -31,6 +31,8 @@
             <el-menu-item index="/BookRecycle">交易历史</el-menu-item>
             <el-menu-item index="/SearchBox1">搜索书籍</el-menu-item>
             <el-menu-item index="/ComfirmReceive">确认收货</el-menu-item>
+            <el-menu-item index="/PayOrders">支付订单</el-menu-item>
+
           </el-submenu>
           <el-submenu index="3">
             <template slot="title"><p class="sub-title">通知</p></template>
