@@ -19,44 +19,25 @@
     <!--        页面主体-->
     <el-container class="main-content">
       <!--            侧边栏-->
-      <el-aside width="150px">
+      <el-aside width="170px">
         <el-menu router
                  text-color="#444"
                  active-text-color="#409eff">
           <el-submenu index="1">
             <template slot="title">
-              <p class="sub-title">读者管理</p>
+              <p class="sub-title">信息管理</p>
             </template>
             <el-menu-item index="/inf">系统信息查询修改</el-menu-item>
-            <el-menu-item index="/AdminChangeUserInfo">修改用户信息</el-menu-item>
-            <el-menu-item index="/AdminChangeUserPassword">修改用户密码</el-menu-item>
+            <el-menu-item index="/Notification1">查看通知</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
-              <p class="sub-title">图书管理</p>
+              <p class="sub-title">书籍管理</p>
             </template>
             <el-menu-item index="/BookReviewAdmin">审核回收申请</el-menu-item>
             <el-menu-item index="/SearchBox">确认回收书籍</el-menu-item>
             <el-menu-item index="/AllBook">管理书籍库存信息</el-menu-item>
-            <el-menu-item index="/BookRegister">确认补货</el-menu-item>
             <el-menu-item index="/BookReturns">查看系统订单</el-menu-item>
-            <el-menu-item index="arch">搜索借阅记录</el-menu-item>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <p class="sub-title">自习室管理</p>
-            </template>
-            <el-menu-item index="/RoomList">获取自习室信息</el-menu-item>
-          </el-submenu>
-          <el-submenu index="4">
-            <template slot="title">
-              <p class="sub-title">管理员内务</p>
-            </template>
-            <el-menu-item index="/adminlist">获取管理员列表</el-menu-item>
-            <el-menu-item index="/AdminChangeIf">修改管理员信息</el-menu-item>
-            <el-menu-item index="/AdminChangePass">修改管理员密码</el-menu-item>
-            <el-menu-item index="/AdminRegister">管理员注册</el-menu-item>
-            <el-menu-item index="/AdminInfo">使用者信息</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>

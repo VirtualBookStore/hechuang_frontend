@@ -17,16 +17,6 @@
         <el-input v-model.number="ruleForm.email"
                   style="width:300px;"></el-input>
       </el-form-item>
-      <el-form-item label="名"
-                    prop="first_name">
-        <el-input v-model.number="ruleForm.first_name"
-                  style="width:300px;"></el-input>
-      </el-form-item>
-      <el-form-item label="姓"
-                    prop="last_name">
-        <el-input v-model.number="ruleForm.last_name"
-                  style="width:300px;"></el-input>
-      </el-form-item>
       <el-form-item label="地址"
                     prop="address">
         <el-input v-model.number="ruleForm.address"
@@ -82,24 +72,17 @@ export default {
   methods: {
     submitForm (formName) {
       var _this = this
-      if (_this.ruleForm.discount_rate >= 1) {
-        alert("折扣率不能超过1")
-        location.reload();
-      }
-      else if (_this.ruleForm.old_rate >= 1) {
-        alert("折旧率不能超过1")
-        location.reload();
-      }
-      else {
-        this.$http.put('/api/v1/config/', _this.ruleForm)
-          .then(function (res) {
-            console.log(res.data);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-        location.reload();
-      }
+
+
+      this.$http.put('/api/v1/profile/', _this.ruleForm)
+        .then(function (res) {
+          console.log(res.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      location.reload();
+
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()

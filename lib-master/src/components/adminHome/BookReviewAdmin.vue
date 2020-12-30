@@ -7,20 +7,18 @@
       <el-table :data="tableData.filter(data => !search || data.order.user.username.toLowerCase().includes(search.toLowerCase()))"
                 style="width: 100%">
         <el-table-column prop="order.id"
-                         label="订单编号"
-                         min-width="70%"></el-table-column>
+                         label="编号"
+                         min-width="30%"></el-table-column>
         <el-table-column prop="order.book.title"
                          label="书名"
                          min-width="70%"></el-table-column>
-        <el-table-column prop="order.status"
-                         label="订单状态"
-                         min-width="90%"></el-table-column>
         <el-table-column prop="price"
-                         label="订单金额"
-                         min-width="70%"></el-table-column>
+                         label="回收金额"
+                         min-width="60%"
+                         :formatter="priceFormat"></el-table-column>
         <el-table-column prop="number"
                          label="数量"
-                         min-width="50%"></el-table-column>
+                         min-width="40%"></el-table-column>
         <el-table-column prop="order.user.username"
                          label="申请用户"
                          min-width="70%"></el-table-column>
@@ -35,12 +33,16 @@
                       placeholder="输入关键字搜索" />
           </template>
           <template slot-scope="scope">
-            <el-button size="small"
-                       @click="disagree(scope.$index)">拒绝
-            </el-button>
-            <el-button size="small"
-                       @click="agree(scope.$index)">同意
-            </el-button>
+            <p>
+              <el-button size="small"
+                         @click="disagree(scope.$index)">拒绝
+              </el-button>
+            </p>
+            <p>
+              <el-button size="small"
+                         @click="agree(scope.$index)">同意
+              </el-button>
+            </p>
           </template>
         </el-table-column>
       </el-table>
@@ -97,6 +99,11 @@ export default {
           });
         }
       });
+    },
+    priceFormat (row, column) {
+
+      return row.price / 100
+
     },
 
     // 增加数据的方式，单独的设置一些值，用于增加功能，这些值放在对象里面进行设置，然后将这个新增的对象塞到总数据里面

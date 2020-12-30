@@ -11,8 +11,7 @@
               border
               :stripe="true">
       <el-table-column prop="id"
-                       label="编号"
-                       min-width="30%"></el-table-column>
+                       label="通知编号"></el-table-column>
       <!--   <el-table-column prop="actor.id"
                        label="订单编号"></el-table-column>
       <el-table-column prop="actor.book.title"
@@ -22,10 +21,9 @@
       <el-table-column prop="verb"
                        label="通知"></el-table-column>
       <el-table-column prop="timestamp"
-                       label="通知时间"
-                       :formatter="timeFormat"></el-table-column>
+                       label="通知时间"></el-table-column>
 
-      <el-table-column width=100px>
+      <el-table-column>
         <template slot-scope="scope">
           <el-button size="small">阅读</el-button>
         </template>
@@ -75,11 +73,6 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
-    },
-    timeFormat (row, column) {
-      var a = row.timestamp;
-      a = a.substring(0, 19);
-      return a
     },
     editData (index, row) {
       console.log('index:' + index)

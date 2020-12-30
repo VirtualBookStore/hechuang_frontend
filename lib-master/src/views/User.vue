@@ -29,8 +29,6 @@
               <p class="sub-title">信息管理</p>
             </template>
             <el-menu-item index="/information">查看个人信息</el-menu-item>
-            <el-menu-item index="/AdminChangeIf1">修改个人信息</el-menu-item>
-            <el-menu-item index="/AdminChangePass1">修改密码</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
