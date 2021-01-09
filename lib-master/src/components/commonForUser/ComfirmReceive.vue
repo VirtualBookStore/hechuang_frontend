@@ -33,7 +33,7 @@
             center
           >
             <p>您要确定收货吗？(请确保已经收货再确认收货！)</p>
-            <span>商品名称：{{ title }} 价格：{{ price }}</span>
+            <span>商品名称：{{ title }} 价格：{{ price/100 }}</span>
             <span slot="footer" class="dialog-footer">
               <el-button @click="ComfirmDialogVisible = false"
                 >取消</el-button
