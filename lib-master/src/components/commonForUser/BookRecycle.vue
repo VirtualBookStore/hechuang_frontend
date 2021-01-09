@@ -20,7 +20,7 @@
           <el-button
             size="small"
             @click="
-              editData(scope.$index, scope.row)
+              editData(scope.$index, scope.row)  
               checkStatus()
             "
             >回收</el-button
@@ -68,6 +68,7 @@ export default {
       recycle_rate:0,
       message: '',
       status: '',
+      old: false,
       form: {},
       RecycleDialogVisible: false,
     }
@@ -102,12 +103,34 @@ export default {
       this.title = this.form['book'].title
       this.price = this.form.price
       this.status = this.form['status']
+      this.old = this.form['old']
       console.log(this.status)
+      console.log(this.old)
     },
+    // checkBookOld(){
+    //   if (this.old === 'true') {
+    //     this.RecycleDialogVisible = true
+    //   } else {
+    //     this.$message({
+    //       showClose: true,
+    //       message: '订单状态不为已完成，无法进行回收！',
+    //       type: 'error',
+    //     })
+    //   }
+    // },
     checkStatus() {
+      if(this.old === true){
+        this.$message({
+          showClose: true,
+          message: '该书籍已经为二手书，无法再次进行回收！',
+          type: 'error',
+        })
+        return
+      } 
       if (this.status === '已完成') {
         this.RecycleDialogVisible = true
-      } else {
+      } 
+      else {
         this.$message({
           showClose: true,
           message: '订单状态不为已完成，无法进行回收！',
