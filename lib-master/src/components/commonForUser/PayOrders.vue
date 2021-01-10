@@ -33,7 +33,7 @@
             center
           >
             <p>您要确定付款吗？</p>
-            <span>商品名称：{{ title }} 价格：{{ price }}</span>
+            <span>商品名称：{{ title }} 价格：{{ price/100 }}</span>
             <span slot="footer" class="dialog-footer">
               <el-button @click="PayDialogVisible = false">取消</el-button>
               <el-button

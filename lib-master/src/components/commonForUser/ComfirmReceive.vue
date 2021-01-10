@@ -21,7 +21,7 @@
             size="small"
             @click="
               editData(scope.$index, scope.row)
-              ComfirmDialogVisible=true
+              ComfirmDialogVisible = true
             "
             >确认收货</el-button
           >
@@ -33,11 +33,9 @@
             center
           >
             <p>您要确定收货吗？(请确保已经收货再确认收货！)</p>
-            <span>商品名称：{{ title }} 价格：{{ price/100 }}</span>
+            <span>商品名称：{{ title }} 价格：{{ price / 100 }}</span>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="ComfirmDialogVisible = false"
-                >取消</el-button
-              >
+              <el-button @click="ComfirmDialogVisible = false">取消</el-button>
               <el-button
                 type="primary"
                 @click="
@@ -78,7 +76,7 @@ export default {
         console.log('orders:', res.data)
         for (let order in res.data) {
           console.log(res.data[order])
-          res.data[order].price/=100
+          res.data[order].price /= 100
           if (res.data[order].status === '已支付') {
             // console.log(order)
             _this.orders.push(res.data[order])
@@ -110,7 +108,7 @@ export default {
         .patch('/api/v1/order/' + this.form.id + '/receive/')
         .then((res) => {
           console.log(res.data)
-          location.reload();
+          location.reload()
         })
         .catch(function(error) {
           console.log(error)
